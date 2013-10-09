@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Web;
+using System.Threading.Tasks;
 using PaymillWrapper.Net;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
@@ -11,7 +11,7 @@ namespace PaymillWrapper.Service
 {
     public class AbstractService<T>
     {
-        protected HttpClientRest _client;
+        protected HttpClientRest Client;
 
         public enum Resource
         {
@@ -26,156 +26,78 @@ namespace PaymillWrapper.Service
 
         public AbstractService(HttpClientRest client)
         {
-            _client = client;
+            Client = client;
         }
 
-        protected List<T> getList<T>(Resource resource, Filter filter)
+        protected async Task<List<T>> GetListAsync(Resource resource, Filter filter)
         {
-            var lstPayments = new List<T>();
-
             string requestUri = Paymill.ApiUrl + "/" + resource.ToString().ToLower();
 
             if (filter != null)
                 requestUri += String.Format("?{0}",filter.ToString());
 
-            var task = _client.GetAsync(requestUri)
-                .ContinueWith(
-                (result) =>
-                {
-                    var response = result.Result;
-                    response.EnsureSuccessStatusCode();
-
-                    var task2 = response.Content
-                        .ReadAsAsync<JObject>()
-                        .ContinueWith(readResult =>
-                        {
-                            var jsonArray = readResult.Result;
-                            lstPayments = Newtonsoft.Json.JsonConvert
-                                .DeserializeObject<List<T>>(jsonArray["data"].ToString());
-
-                        });
-                    task2.Wait();
-                });
-            task.Wait();
-
-            return lstPayments;
+            var response = await Client.GetAsync(requestUri);
+            response.EnsureSuccessStatusCode();
+            var jsonArray = await response.Content.ReadAsAsync<JObject>();
+            return JsonConvert.DeserializeObject<List<T>>(jsonArray["data"].ToString());
         }
 
-        protected List<T> getList<T>(Resource resource)
+        protected async Task<List<T>> GetListAsync(Resource resource)
         {
-            return getList<T>(resource,null);
+            return await GetListAsync(resource,null);
         }
-        protected T add<T>(Resource resource, object obj, string resourceID, string encodeParams)
-        {
-            T reply = default(T);
 
+        protected async Task<TResult> AddAsync<TResult>(Resource resource, object obj, string resourceID, string encodeParams)
+        {
             var content = new StringContent(encodeParams);
             content.Headers.ContentType = new MediaTypeHeaderValue("application/x-www-form-urlencoded");
 
-            string requestUri = Paymill.ApiUrl + "/" + resource.ToString().ToLower();
+            var requestUri = Paymill.ApiUrl + "/" + resource.ToString().ToLower();
 
             if (!string.IsNullOrEmpty(resourceID))
                 requestUri += "/" + resourceID;
 
-            var task = _client.PostAsync(requestUri, content).ContinueWith(
-                (result) =>
-                {
-                    var response = result.Result;
-                    response.EnsureSuccessStatusCode();
+            var response = await Client.PostAsync(requestUri, content);
+            response.EnsureSuccessStatusCode();
 
-                    var task2 = response.Content
-                        .ReadAsAsync<JObject>()
-                        .ContinueWith(readResult =>
-                        {
-                            var jsonArray = readResult.Result;
-
-                            reply = Newtonsoft.Json.JsonConvert
-                                .DeserializeObject<T>(jsonArray["data"].ToString());
-                        });
-                    task2.Wait();
-                });
-            task.Wait();
-
-            return reply;
+            var jsonArray = await response.Content.ReadAsAsync<JObject>();
+            return JsonConvert.DeserializeObject<TResult>(jsonArray["data"].ToString());
         }
-        protected T get<T>(Resource resource, string resourceID)
+
+        protected async Task<T> AddAsync(Resource resource, object obj, string resourceID, string encodeParams)
         {
-            T reply = default(T);
-
-            string requestUri = Paymill.ApiUrl + "/" + resource.ToString().ToLower() + "/" + resourceID;
-            var task = _client.GetAsync(requestUri).ContinueWith(
-                (result) =>
-                {
-                    var response = result.Result;
-                    response.EnsureSuccessStatusCode();
-
-                    var task2 = response.Content
-                        .ReadAsAsync<JObject>()
-                        .ContinueWith(readResult =>
-                        {
-                            var jsonArray = readResult.Result;
-                            reply = Newtonsoft.Json.JsonConvert
-                                .DeserializeObject<T>(jsonArray["data"].ToString());
-                        });
-                    task2.Wait();
-                });
-            task.Wait();
-
-            return reply;
+            return await AddAsync<T>(resource, obj, resourceID, encodeParams);
         }
-        protected bool remove<T>(Resource resource, string resourceID)
+
+        protected async Task<T> GetAsync(Resource resource, string resourceID)
         {
-            bool reply = false;
-
-            string requestUri = Paymill.ApiUrl + "/" + resource.ToString().ToLower() + "/" + resourceID;
-            var task = _client.DeleteAsync(requestUri).ContinueWith(
-                (result) =>
-                {
-                    var response = result.Result;
-                    response.EnsureSuccessStatusCode();
-
-                    var task2 = response.Content
-                        .ReadAsAsync<JObject>()
-                        .ContinueWith(readResult =>
-                        {
-                            var jsonArray = readResult.Result;
-                            string r = jsonArray["data"].ToString();
-                            reply = r.Equals("[]");
-                        });
-                    task2.Wait();
-                });
-            task.Wait();
-
-            return reply;
+            var requestUri = Paymill.ApiUrl + "/" + resource.ToString().ToLower() + "/" + resourceID;
+            var response = await Client.GetAsync(requestUri);
+            response.EnsureSuccessStatusCode();
+            var jsonArray = await response.Content.ReadAsAsync<JObject>();
+            return JsonConvert.DeserializeObject<T>(jsonArray["data"].ToString());
         }
-        protected T update<T>(Resource resource, object obj, string resourceID, string encodeParams)
-        {
-            T reply = default(T);
 
+        protected async Task<bool> RemoveAsync(Resource resource, string resourceID)
+        {
+            var requestUri = Paymill.ApiUrl + "/" + resource.ToString().ToLower() + "/" + resourceID;
+            var response = await Client.DeleteAsync(requestUri);
+            response.EnsureSuccessStatusCode();
+            var jsonArray = await response.Content.ReadAsAsync<JObject>();
+            var r = jsonArray["data"].ToString();
+            return r.Equals("[]");
+        }
+
+        protected async Task<T> UpdateAsync(Resource resource, object obj, string resourceID, string encodeParams)
+        {
             var content = new StringContent(encodeParams);
             content.Headers.ContentType = new MediaTypeHeaderValue("application/x-www-form-urlencoded");
 
-            string requestUri = Paymill.ApiUrl + "/" + resource.ToString().ToLower() + "/" + resourceID;
-            var task = _client.PutAsync(requestUri, content).ContinueWith(
-                (result) =>
-                {
-                    var response = result.Result;
-                    response.EnsureSuccessStatusCode();
-
-                    var task2 = response.Content
-                        .ReadAsAsync<JObject>()
-                        .ContinueWith(readResult =>
-                        {
-                            var jsonArray = readResult.Result;
-
-                            reply = Newtonsoft.Json.JsonConvert
-                                .DeserializeObject<T>(jsonArray["data"].ToString());
-                        });
-                    task2.Wait();
-                });
-            task.Wait();
-
-            return reply;
+            var requestUri = Paymill.ApiUrl + "/" + resource.ToString().ToLower() + "/" + resourceID;
+            var response = await Client.PutAsync(requestUri, content);
+            response.EnsureSuccessStatusCode();
+            var jsonArray = await response.Content.ReadAsAsync<JObject>();
+            return JsonConvert.DeserializeObject<T>(jsonArray["data"].ToString());
         }
     }
 }

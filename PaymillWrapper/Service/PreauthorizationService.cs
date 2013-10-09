@@ -1,7 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using PaymillWrapper.Models;
 using PaymillWrapper.Net;
 
@@ -18,9 +16,9 @@ namespace PaymillWrapper.Service
         /// This function allows request a preauthorization list
         /// </summary>
         /// <returns>Returns a list preauthorizations-object</returns>
-        public List<Preauthorization> GetPreauthorizations()
+        public async Task<List<Preauthorization>> GetPreauthorizationsAsync()
         {
-            return getList<Preauthorization>(Resource.Preauthorizations);
+            return await GetListAsync(Resource.Preauthorizations);
         }
 
         /// <summary>
@@ -28,21 +26,21 @@ namespace PaymillWrapper.Service
         /// </summary>
         /// <param name="filter">Result filtered in the required way</param>
         /// <returns>Returns a list preauthorization-object</returns>
-        public List<Preauthorization> GetPreauthorizations(Filter filter)
+        public async Task<List<Preauthorization>> GetPreauthorizationsAsync(Filter filter)
         {
-            return getList<Preauthorization>(Resource.Preauthorizations, filter);
+            return await GetListAsync(Resource.Preauthorizations, filter);
         }
 
         /// <summary>
         /// This function creates a transaction object
         /// </summary>
-        /// <param name="client">Object-transaction</param>
+        /// <param name="preauthorization">Object-transaction</param>
         /// <returns>New object-transaction just add</returns>
-        public Preauthorization AddPreauthorization(Preauthorization preauthorization)
+        public async Task<Preauthorization> AddPreauthorizationAsync(Preauthorization preauthorization)
         {
             Preauthorization reply=null;
 
-            Transaction replyTransaction = add<Transaction>(
+            var replyTransaction = await AddAsync<Transaction>(
                 Resource.Preauthorizations,
                 preauthorization,
                 null,
@@ -55,13 +53,13 @@ namespace PaymillWrapper.Service
         }
 
         /// <summary>
-        /// To get the details of an existing preauthorization you’ll need to supply the transaction ID
+        /// To GetAsync the details of an existing preauthorization you’ll need to supply the transaction ID
         /// </summary>
-        /// <param name="clientID">Preauthorization identifier</param>
+        /// <param name="preauthorizationID">Preauthorization identifier</param>
         /// <returns>Preauthorization-object</returns>
-        public Preauthorization GetPreauthorization(string preauthorizationID)
+        public async Task<Preauthorization> GetPreauthorizationAsync(string preauthorizationID)
         {
-            return get<Preauthorization>(Resource.Preauthorizations, preauthorizationID);
+            return await GetAsync(Resource.Preauthorizations, preauthorizationID);
         }
     }
 }

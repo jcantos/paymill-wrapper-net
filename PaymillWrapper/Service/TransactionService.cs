@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Web;
 using PaymillWrapper.Models;
 using PaymillWrapper.Net;
@@ -17,9 +18,9 @@ namespace PaymillWrapper.Service
         /// This function allows request a transaction list
         /// </summary>
         /// <returns>Returns a list transactions-object</returns>
-        public List<Transaction> GetTransactions()
+        public async Task<List<Transaction>> GetTransactionsAsync()
         {
-            return getList<Transaction>(Resource.Transactions);
+            return await GetListAsync(Resource.Transactions);
         }
 
         /// <summary>
@@ -27,9 +28,9 @@ namespace PaymillWrapper.Service
         /// </summary>
         /// <param name="filter">Result filtered in the required way</param>
         /// <returns>Returns a list transaction-object</returns>
-        public List<Transaction> GetTransactions(Filter filter)
+        public async Task<List<Transaction>> GetTransactionsAsync(Filter filter)
         {
-            return getList<Transaction>(Resource.Transactions, filter);
+            return await GetListAsync(Resource.Transactions, filter);
         }
 
         /// <summary>
@@ -37,9 +38,9 @@ namespace PaymillWrapper.Service
         /// </summary>
         /// <param name="client">Object-transaction</param>
         /// <returns>New object-transaction just add</returns>
-        public Transaction AddTransaction(Transaction transaction)
+        public async Task<Transaction> AddTransactionAsync(Transaction transaction)
         {
-            return add<Transaction>(
+            return await AddAsync(
                 Resource.Transactions,
                 transaction,
                 null,
@@ -47,13 +48,13 @@ namespace PaymillWrapper.Service
         }
 
         /// <summary>
-        /// To get the details of an existing transaction you’ll need to supply the transaction ID
+        /// To GetAsync the details of an existing transaction you’ll need to supply the transaction ID
         /// </summary>
         /// <param name="clientID">Client identifier</param>
         /// <returns>Client-object</returns>
-        public Transaction GetTransaction(string transactionID)
+        public async Task<Transaction> GetTransactionAsync(string transactionID)
         {
-            return get<Transaction>(Resource.Transactions, transactionID);
+            return await GetAsync(Resource.Transactions, transactionID);
         }
     }
 }

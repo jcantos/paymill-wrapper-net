@@ -18,13 +18,18 @@ namespace SandboxConsole
     {
         static void Main(string[] args)
         {
-            getClientsWithParameters();
+            AsyncMain().Wait();
 
             Console.ReadLine();
         }
 
+        static async Task AsyncMain()
+        {
+            await getClientsWithParameters();
+        }
+
         // payments
-        static void getPayments()
+        static async Task getPayments()
         {
             Paymill.ApiKey = Properties.Settings.Default.ApiKey;
             Paymill.ApiUrl = Properties.Settings.Default.ApiUrl;
@@ -33,7 +38,7 @@ namespace SandboxConsole
             // list payments
             Console.WriteLine("Waiting request list payments...");
 
-            List<Payment> lstPayments = paymentService.GetPayments();
+            List<Payment> lstPayments = await paymentService.GetPaymentsAsync();
 
             foreach (Payment payment in lstPayments)
             {
@@ -42,7 +47,7 @@ namespace SandboxConsole
 
             Console.Read();
         }
-        static void getPaymentsWithParameters()
+        static async Task getPaymentsWithParameters()
         {
             Paymill.ApiKey = Properties.Settings.Default.ApiKey;
             Paymill.ApiUrl = Properties.Settings.Default.ApiUrl;
@@ -55,7 +60,7 @@ namespace SandboxConsole
             filter.Add("count", 5);
             filter.Add("offset", 41);
 
-            List<Payment> lstPayments = paymentService.GetPayments(filter);
+            List<Payment> lstPayments = await paymentService.GetPaymentsAsync(filter);
 
             foreach (Payment payment in lstPayments)
             {
@@ -64,7 +69,7 @@ namespace SandboxConsole
 
             Console.Read();
         }
-        static void addCreditCardPayment()
+        static async Task addCreditCardPayment()
         {
             Paymill.ApiKey = Properties.Settings.Default.ApiKey;
             Paymill.ApiUrl = Properties.Settings.Default.ApiUrl;
@@ -73,12 +78,12 @@ namespace SandboxConsole
             Payment payment = new Payment();
             payment.Token = "098f6bcd4621d373cade4e832627b4f6";
             
-            Payment newPayment = paymentService.AddPayment(payment);
+            Payment newPayment = await paymentService.AddPaymentAsync(payment);
 
             Console.WriteLine("PaymentID:" + newPayment.Id);
             Console.Read();
         }
-        static void addCreditCardPaymentWithClient()
+        static async Task addCreditCardPaymentWithClient()
         {
             Paymill.ApiKey = Properties.Settings.Default.ApiKey;
             Paymill.ApiUrl = Properties.Settings.Default.ApiUrl;
@@ -88,13 +93,13 @@ namespace SandboxConsole
             payment.Token = "098f6bcd4621d373cade4e832627b4f6";
             payment.Client = "client_ad591663d69051d306a8";
             
-            Payment newPayment = paymentService.AddPayment(payment);
+            Payment newPayment = await paymentService.AddPaymentAsync(payment);
 
             Console.WriteLine("PaymentID:" + newPayment.Id);
             Console.WriteLine("Created at:" + newPayment.Created_At);
             Console.Read();
         }
-        static void addDebitPayment()
+        static async Task addDebitPayment()
         {
             Paymill.ApiKey = Properties.Settings.Default.ApiKey;
             Paymill.ApiUrl = Properties.Settings.Default.ApiUrl;
@@ -106,13 +111,13 @@ namespace SandboxConsole
             payment.Account = "1234512345";
             payment.Holder = "Max Mustermann";
 
-            Payment newPayment = paymentService.AddPayment(payment);
+            Payment newPayment = await paymentService.AddPaymentAsync(payment);
 
             Console.WriteLine("PaymentID:" + newPayment.Id);
             Console.WriteLine("Created at:" + newPayment.Created_At);
             Console.Read();
         }
-        static void addDebitPaymentWithClient()
+        static async Task addDebitPaymentWithClient()
         {
             Paymill.ApiKey = Properties.Settings.Default.ApiKey;
             Paymill.ApiUrl = Properties.Settings.Default.ApiUrl;
@@ -125,47 +130,47 @@ namespace SandboxConsole
             payment.Holder = "Max Mustermann";
             payment.Client = "client_bbe895116de80b6141fd";
 
-            Payment newPayment = paymentService.AddPayment(payment);
+            Payment newPayment = await paymentService.AddPaymentAsync(payment);
 
             Console.WriteLine("PaymentID:" + newPayment.Id);
             Console.WriteLine("Created at:" + newPayment.Created_At);
             Console.Read();
         }
-        static void getPayment()
+        static async Task getPayment()
         {
             Paymill.ApiKey = Properties.Settings.Default.ApiKey;
             Paymill.ApiUrl = Properties.Settings.Default.ApiUrl;
             PaymentService paymentService = Paymill.GetService<PaymentService>();
 
             string paymentID = "pay_4c159fe95d3be503778a";
-            Payment payment = paymentService.GetPayment(paymentID);
+            Payment payment = await paymentService.GetPaymentAsync(paymentID);
 
             Console.WriteLine("PaymentID:" + payment.Id);
             Console.WriteLine("PaymentID:" + payment.Created_At.ToShortDateString());
             Console.Read();
         }
-        static void removePayment()
+        static async Task removePayment()
         {
             Paymill.ApiKey = Properties.Settings.Default.ApiKey;
             Paymill.ApiUrl = Properties.Settings.Default.ApiUrl;
             PaymentService paymentService = Paymill.GetService<PaymentService>();
 
             string paymentID = "pay_640be2127169cea1d375";
-            bool reply = paymentService.RemovePayment(paymentID);
+            bool reply = await paymentService.RemovePaymentAsync(paymentID);
 
             Console.WriteLine("Result remove:" + reply);
             Console.Read();
         }
 
         // transactions
-        static void getTransactions()
+        static async Task getTransactions()
         {
             Paymill.ApiKey = Properties.Settings.Default.ApiKey;
             Paymill.ApiUrl = Properties.Settings.Default.ApiUrl;
             TransactionService transactionService = Paymill.GetService<TransactionService>();
 
             Console.WriteLine("Waiting request list transactions...");
-            List<Transaction> lstTransactions = transactionService.GetTransactions();
+            List<Transaction> lstTransactions = await transactionService.GetTransactionsAsync();
 
             foreach (Transaction transaction in lstTransactions)
             {
@@ -174,7 +179,7 @@ namespace SandboxConsole
 
             Console.Read();
         }
-        static void getTransactionsWithParameters()
+        static async Task getTransactionsWithParameters()
         {
             Paymill.ApiKey = Properties.Settings.Default.ApiKey;
             Paymill.ApiUrl = Properties.Settings.Default.ApiUrl;
@@ -186,7 +191,7 @@ namespace SandboxConsole
             filter.Add("count", 1);
             filter.Add("offset", 2);
 
-            List<Transaction> lstTransactions = transactionService.GetTransactions(filter);
+            List<Transaction> lstTransactions = await transactionService.GetTransactionsAsync(filter);
 
             foreach (Transaction transaction in lstTransactions)
             {
@@ -195,7 +200,7 @@ namespace SandboxConsole
 
             Console.Read();
         }
-        static void addTransaction()
+        static async Task addTransaction()
         {
             Paymill.ApiKey = Properties.Settings.Default.ApiKey;
             Paymill.ApiUrl = Properties.Settings.Default.ApiUrl;
@@ -207,12 +212,12 @@ namespace SandboxConsole
             transaction.Currency = "EUR";
             transaction.Description = "Prueba desde API c#";
 
-            Transaction newTransaction = transactionService.AddTransaction(transaction);
+            Transaction newTransaction = await transactionService.AddTransactionAsync(transaction);
 
             Console.WriteLine("TransactionID:" + newTransaction.Id);
             Console.Read();
         }
-        static void addTransactionWithPayment()
+        static async Task addTransactionWithPayment()
         {
             Paymill.ApiKey = Properties.Settings.Default.ApiKey;
             Paymill.ApiUrl = Properties.Settings.Default.ApiUrl;
@@ -224,12 +229,12 @@ namespace SandboxConsole
             transaction.Description = "Prueba desde API c#";
             transaction.Payment = new Payment() { Id = "pay_81ec02206e9b9c587513" };
 
-            Transaction newTransaction = transactionService.AddTransaction(transaction);
+            Transaction newTransaction = await transactionService.AddTransactionAsync(transaction);
 
             Console.WriteLine("TransactionID:" + newTransaction.Id);
             Console.Read();
         }
-        static void addTransactionWithClient()
+        static async Task addTransactionWithClient()
         {
             // Hay que depurar esta función, no funciona bien cuando se pasa el identificador del cliente, 
             // está creando un nuevo cliente aunque le pasemos el identificador de uno ya existente
@@ -246,12 +251,12 @@ namespace SandboxConsole
             transaction.Payment = new Payment() { Id = "pay_c08f1f94754b93f46ac3" };
             transaction.Client = new Client() { Id = "client_ad591663d69051d306a8" };
 
-            Transaction newTransaction = transactionService.AddTransaction(transaction);
+            Transaction newTransaction = await transactionService.AddTransactionAsync(transaction);
 
             Console.WriteLine("TransactionID:" + newTransaction.Id);
             Console.Read();
         }
-        static void getTransaction()
+        static async Task getTransaction()
         {
             Paymill.ApiKey = Properties.Settings.Default.ApiKey;
             Paymill.ApiUrl = Properties.Settings.Default.ApiUrl;
@@ -259,7 +264,7 @@ namespace SandboxConsole
 
             Console.WriteLine("Solicitando transaction...");
             string transactionID = "tran_9255ee9ad5a7f2999625";
-            Transaction transaction = transactionService.GetTransaction(transactionID);
+            Transaction transaction = await transactionService.GetTransactionAsync(transactionID);
 
             Console.WriteLine("TransactionID:" + transaction.Id);
             Console.WriteLine("Created at:" + transaction.Created_At.ToShortDateString());
@@ -267,14 +272,14 @@ namespace SandboxConsole
         }
 
         // preauthorizations
-        static void getPreauthorizations()
+        static async Task getPreauthorizations()
         {
             Paymill.ApiKey = Properties.Settings.Default.ApiKey;
             Paymill.ApiUrl = Properties.Settings.Default.ApiUrl;
             PreauthorizationService preauthorizationService = Paymill.GetService<PreauthorizationService>();
 
             Console.WriteLine("Waiting request list preauthorizations...");
-            List<Preauthorization> lstPreauthorizations = preauthorizationService.GetPreauthorizations();
+            List<Preauthorization> lstPreauthorizations = await preauthorizationService.GetPreauthorizationsAsync();
 
             foreach (Preauthorization preauthorization in lstPreauthorizations)
             {
@@ -283,7 +288,7 @@ namespace SandboxConsole
 
             Console.Read();
         }
-        static void getPreauthorizationsWithParameters()
+        static async Task getPreauthorizationsWithParameters()
         {
             Paymill.ApiKey = Properties.Settings.Default.ApiKey;
             Paymill.ApiUrl = Properties.Settings.Default.ApiUrl;
@@ -295,7 +300,7 @@ namespace SandboxConsole
             filter.Add("count", 1);
             filter.Add("offset", 2);
 
-            List<Preauthorization> lstPreauthorizations = preauthorizationService.GetPreauthorizations(filter);
+            List<Preauthorization> lstPreauthorizations = await preauthorizationService.GetPreauthorizationsAsync(filter);
 
             foreach (Preauthorization preauthorization in lstPreauthorizations)
             {
@@ -304,7 +309,7 @@ namespace SandboxConsole
 
             Console.Read();
         }
-        static void addPreauthorization()
+        static async Task addPreauthorization()
         {
             Paymill.ApiKey = Properties.Settings.Default.ApiKey;
             Paymill.ApiUrl = Properties.Settings.Default.ApiUrl;
@@ -316,12 +321,12 @@ namespace SandboxConsole
             //preauthorization.Token = "098f6bcd4621d373cade4e832627b4f6";
             preauthorization.Payment = new Payment() { Id = "pay_4c159fe95d3be503778a" };
 
-            Preauthorization newPreauthorization = preauthorizationService.AddPreauthorization(preauthorization);
+            Preauthorization newPreauthorization = await preauthorizationService.AddPreauthorizationAsync(preauthorization);
 
             Console.WriteLine("PreauthorizationID:" + newPreauthorization.Id);
             Console.Read();
         }
-        static void getPreauthorization()
+        static async Task getPreauthorization()
         {
             Paymill.ApiKey = Properties.Settings.Default.ApiKey;
             Paymill.ApiUrl = Properties.Settings.Default.ApiUrl;
@@ -329,7 +334,7 @@ namespace SandboxConsole
 
             Console.WriteLine("Solicitando preauthorization...");
             string preauthorizationID = "preauth_96fe414f466f91ddb266";
-            Preauthorization preauthorization = preauthorizationService.GetPreauthorization(preauthorizationID);
+            Preauthorization preauthorization = await preauthorizationService.GetPreauthorizationAsync(preauthorizationID);
 
             Console.WriteLine("PreauthorizationID:" + preauthorization.Id);
             Console.WriteLine("Created at:" + preauthorization.Created_At.ToShortDateString());
@@ -337,14 +342,14 @@ namespace SandboxConsole
         }
 
         // refunds
-        static void getRefunds()
+        static async Task getRefunds()
         {
             Paymill.ApiKey = Properties.Settings.Default.ApiKey;
             Paymill.ApiUrl = Properties.Settings.Default.ApiUrl;
             RefundService refundService = Paymill.GetService<RefundService>();
 
             Console.WriteLine("Waiting request list refunds...");
-            List<Refund> lstRefunds = refundService.GetRefunds();
+            List<Refund> lstRefunds = await refundService.GetRefundsAsync();
 
             foreach (Refund refund in lstRefunds)
             {
@@ -353,7 +358,7 @@ namespace SandboxConsole
 
             Console.Read();
         }
-        static void getRefundsWithParameters()
+        static async Task getRefundsWithParameters()
         {
             // probar los parametros, no funciona bien
             // transaction es ok
@@ -371,7 +376,7 @@ namespace SandboxConsole
             Filter filter = new Filter();
             filter.Add("count", 5);
 
-            List<Refund> lstRefunds = refundService.GetRefunds(filter);
+            List<Refund> lstRefunds = await refundService.GetRefundsAsync(filter);
 
             foreach (Refund refund in lstRefunds)
             {
@@ -380,7 +385,7 @@ namespace SandboxConsole
 
             Console.Read();
         }
-        static void addRefund()
+        static async Task addRefund()
         {
             // la documentación de la API está mal, devuelve un objeto Refund en vez de Transaction
 
@@ -393,12 +398,12 @@ namespace SandboxConsole
             refund.Description = "Prueba desde API c#";
             refund.Transaction = new Transaction() { Id = "tran_a7c93a1e5b431b52c0f0" };
 
-            Refund newRefund = refundService.AddRefund(refund);
+            Refund newRefund = await refundService.AddRefundAsync(refund);
 
             Console.WriteLine("RefundID:" + newRefund.Id);
             Console.Read();
         }
-        static void getRefund()
+        static async Task getRefund()
         {
             Paymill.ApiKey = Properties.Settings.Default.ApiKey;
             Paymill.ApiUrl = Properties.Settings.Default.ApiUrl;
@@ -406,7 +411,7 @@ namespace SandboxConsole
 
             Console.WriteLine("Request refund...");
             string refundID = "refund_53860aa0e514d4913aad";
-            Refund refund = refundService.GetRefund(refundID);
+            Refund refund = await refundService.GetRefundAsync(refundID);
 
             Console.WriteLine("RefundID:" + refund.Id);
             Console.WriteLine("Created at:" + refund.Created_At.ToShortDateString());
@@ -414,14 +419,14 @@ namespace SandboxConsole
         }
 
         // clients
-        static void getClients()
+        static async Task getClients()
         {
             Paymill.ApiKey = Properties.Settings.Default.ApiKey;
             Paymill.ApiUrl = Properties.Settings.Default.ApiUrl;
             ClientService clientService = Paymill.GetService<ClientService>();
 
             Console.WriteLine("Waiting request list clients...");
-            List<Client> lstClients = clientService.GetClients();
+            List<Client> lstClients = await clientService.GetClientsAsync();
 
             foreach (Client c in lstClients)
             {
@@ -430,7 +435,7 @@ namespace SandboxConsole
 
             Console.Read();
         }
-        static void getClientsWithParameters()
+        static async Task getClientsWithParameters()
         {
             Paymill.ApiKey = Properties.Settings.Default.ApiKey;
             Paymill.ApiUrl = Properties.Settings.Default.ApiUrl;
@@ -443,7 +448,7 @@ namespace SandboxConsole
             //filter.Add("creditcard", "pay_f95c7d70c6ad8da339e5"); //KO
             filter.Add("created_at", 1352930695); //KO
 
-            List<Client> lstClients = clientService.GetClients(filter);
+            List<Client> lstClients = await clientService.GetClientsAsync(filter);
 
             foreach (Client c in lstClients)
             {
@@ -452,7 +457,7 @@ namespace SandboxConsole
 
             Console.Read();
         }
-        static void addClient()
+        static async Task addClient()
         {
             Paymill.ApiKey = Properties.Settings.Default.ApiKey;
             Paymill.ApiUrl = Properties.Settings.Default.ApiUrl;
@@ -462,12 +467,12 @@ namespace SandboxConsole
             c.Description = "Prueba API";
             c.Email = "javicantos22@hotmail.es";
 
-            Client newClient = clientService.AddClient(c);
+            Client newClient = await clientService.AddClientAsync(c);
 
             Console.WriteLine("ClientID:" + newClient.Id);
             Console.Read();
         }
-        static void getClient()
+        static async Task getClient()
         {
             Paymill.ApiKey = Properties.Settings.Default.ApiKey;
             Paymill.ApiUrl = Properties.Settings.Default.ApiUrl;
@@ -475,13 +480,13 @@ namespace SandboxConsole
 
             Console.WriteLine("Request client...");
             string clientID = "client_ad591663d69051d306a8";
-            Client c = clientService.GetClient(clientID);
+            Client c = await clientService.GetClientAsync(clientID);
 
             Console.WriteLine("ClientID:" + c.Id);
             Console.WriteLine("Created at:" + c.Created_At.ToShortDateString());
             Console.Read();
         }
-        static void updateClient()
+        static async Task updateClient()
         {
             Paymill.ApiKey = Properties.Settings.Default.ApiKey;
             Paymill.ApiUrl = Properties.Settings.Default.ApiUrl;
@@ -492,12 +497,12 @@ namespace SandboxConsole
             c.Email = "javicantos33@hotmail.es";
             c.Id = "client_bbe895116de80b6141fd";
 
-            Client updatedClient = clientService.UpdateClient(c);
+            Client updatedClient = await clientService.UpdateClientAsync(c);
 
             Console.WriteLine("ClientID:" + updatedClient.Id);
             Console.Read();
         }
-        static void removeClient()
+        static async Task removeClient()
         {
             // lo borra pero no devuelve blanco
             // devuelve el objeto cliente con el identificador pasado por parametro
@@ -509,21 +514,21 @@ namespace SandboxConsole
             Console.WriteLine("Removing client...");
 
             string clientID = "client_180ad3d1042a1da4a0a0";
-            bool reply = clientService.RemoveClient(clientID);
+            bool reply = await clientService.RemoveClientAsync(clientID);
 
             Console.WriteLine("Result remove:" + reply);
             Console.Read();
         }
 
         // offers
-        static void getOffers()
+        static async Task getOffers()
         {
             Paymill.ApiKey = Properties.Settings.Default.ApiKey;
             Paymill.ApiUrl = Properties.Settings.Default.ApiUrl;
             OfferService offerService = Paymill.GetService<OfferService>();
 
             Console.WriteLine("Waiting request list offers...");
-            List<Offer> lstOffers = offerService.GetOffers();
+            List<Offer> lstOffers = await offerService.GetOffersAsync();
 
             foreach (Offer o in lstOffers)
             {
@@ -532,7 +537,7 @@ namespace SandboxConsole
 
             Console.Read();
         }
-        static void getOffersWithParameters()
+        static async Task getOffersWithParameters()
         {
             Paymill.ApiKey = Properties.Settings.Default.ApiKey;
             Paymill.ApiUrl = Properties.Settings.Default.ApiUrl;
@@ -551,7 +556,7 @@ namespace SandboxConsole
             //filter.Add("created_at", span.TotalSeconds.ToString()); //KO
             //filter.Add("trial_period_days", 5); //OK
 
-            List<Offer> lstOffers = offerService.GetOffers(filter);
+            List<Offer> lstOffers = await offerService.GetOffersAsync(filter);
 
             foreach (Offer o in lstOffers)
             {
@@ -560,7 +565,7 @@ namespace SandboxConsole
 
             Console.Read();
         }
-        static void addOffer()
+        static async Task addOffer()
         {
             Paymill.ApiKey = Properties.Settings.Default.ApiKey;
             Paymill.ApiUrl = Properties.Settings.Default.ApiUrl;
@@ -573,12 +578,12 @@ namespace SandboxConsole
             offer.Name = "Prueba API";
             offer.Trial_Period_Days = 3;
 
-            Offer newOffer = offerService.AddOffer(offer);
+            Offer newOffer = await offerService.AddOfferAsync(offer);
 
             Console.WriteLine("OfferID:" + newOffer.Id);
             Console.Read();
         }
-        static void getOffer()
+        static async Task getOffer()
         {
             Paymill.ApiKey = Properties.Settings.Default.ApiKey;
             Paymill.ApiUrl = Properties.Settings.Default.ApiUrl;
@@ -586,13 +591,13 @@ namespace SandboxConsole
 
             Console.WriteLine("Request offer...");
             string offerID = "offer_6eea405f83d4d3098604";
-            Offer offer = offerService.GetOffer(offerID);
+            Offer offer = await offerService.GetOfferAsync(offerID);
 
             Console.WriteLine("OfferID:" + offer.Id);
             Console.WriteLine("Created at:" + offer.Created_At.ToShortDateString());
             Console.Read();
         }
-        static void updateOffer()
+        static async Task updateOffer()
         {
             Paymill.ApiKey = Properties.Settings.Default.ApiKey;
             Paymill.ApiUrl = Properties.Settings.Default.ApiUrl;
@@ -602,12 +607,12 @@ namespace SandboxConsole
             offer.Name = "Oferta 48";
             offer.Id = "offer_6eea405f83d4d3098604";
 
-            Offer updatedOffer = offerService.UpdateOffer(offer);
+            Offer updatedOffer = await offerService.UpdateOfferAsync(offer);
 
             Console.WriteLine("OfferID:" + updatedOffer.Id);
             Console.Read();
         }
-        static void removeOffer()
+        static async Task removeOffer()
         {
             Paymill.ApiKey = Properties.Settings.Default.ApiKey;
             Paymill.ApiUrl = Properties.Settings.Default.ApiUrl;
@@ -616,21 +621,21 @@ namespace SandboxConsole
             Console.WriteLine("Removing offer...");
 
             string offerID = "offer_6eea405f83d4d3098604";
-            bool reply = offerService.RemoveOffer(offerID);
+            bool reply = await offerService.RemoveOfferAsync(offerID);
 
             Console.WriteLine("Result remove:" + reply);
             Console.Read();
         }
 
         // subscriptions
-        static void getSubscriptions()
+        static async Task getSubscriptions()
         {
             Paymill.ApiKey = Properties.Settings.Default.ApiKey;
             Paymill.ApiUrl = Properties.Settings.Default.ApiUrl;
             SubscriptionService susbscriptionService = Paymill.GetService<SubscriptionService>();
 
             Console.WriteLine("Waiting request list subscriptions...");
-            List<Subscription> lstSubscriptions = susbscriptionService.GetSubscriptions();
+            List<Subscription> lstSubscriptions = await susbscriptionService.GetSubscriptionsAsync();
 
             foreach (Subscription s in lstSubscriptions)
             {
@@ -639,7 +644,7 @@ namespace SandboxConsole
 
             Console.Read();
         }
-        static void getSubscriptionsWithParameters()
+        static async Task getSubscriptionsWithParameters()
         {
             Paymill.ApiKey = Properties.Settings.Default.ApiKey;
             Paymill.ApiUrl = Properties.Settings.Default.ApiUrl;
@@ -654,7 +659,7 @@ namespace SandboxConsole
             //filter.Add("canceled_at", 495); //KO
             //filter.Add("created_at", 1353194860); //KO
             
-            List<Subscription> lstSubscriptions = susbscriptionService.GetSubscriptions(filter);
+            List<Subscription> lstSubscriptions = await susbscriptionService.GetSubscriptionsAsync(filter);
 
             foreach (Subscription s in lstSubscriptions)
             {
@@ -663,7 +668,7 @@ namespace SandboxConsole
 
             Console.Read();
         }
-        static void addSubscription()
+        static async Task addSubscription()
         {
             Paymill.ApiKey = Properties.Settings.Default.ApiKey;
             Paymill.ApiUrl = Properties.Settings.Default.ApiUrl;
@@ -674,12 +679,12 @@ namespace SandboxConsole
             subscription.Offer = new Offer() { Id = "offer_32008ddd39954e71ed48" };
             subscription.Payment = new Payment() { Id = "pay_81ec02206e9b9c587513" };
 
-            Subscription newSubscription = susbscriptionService.AddSubscription(subscription);
+            Subscription newSubscription = await susbscriptionService.AddSubscriptionAsync(subscription);
 
             Console.WriteLine("SubscriptionID:" + newSubscription.Id);
             Console.Read();
         }
-        static void getSubscription()
+        static async Task getSubscription()
         {
             Paymill.ApiKey = Properties.Settings.Default.ApiKey;
             Paymill.ApiUrl = Properties.Settings.Default.ApiUrl;
@@ -687,13 +692,13 @@ namespace SandboxConsole
 
             Console.WriteLine("Request subscription...");
             string subscriptionID = "sub_e77d3332e456674101ad";
-            Subscription subscription = susbscriptionService.GetSubscription(subscriptionID);
+            Subscription subscription = await susbscriptionService.GetSubscriptionAsync(subscriptionID);
 
             Console.WriteLine("SubscriptionID:" + subscription.Id);
             Console.WriteLine("Created at:" + subscription.Created_At.ToShortDateString());
             Console.Read();
         }
-        static void updateSubscription()
+        static async Task updateSubscription()
         {
             Paymill.ApiKey = Properties.Settings.Default.ApiKey;
             Paymill.ApiUrl = Properties.Settings.Default.ApiUrl;
@@ -703,12 +708,12 @@ namespace SandboxConsole
             subscription.Cancel_At_Period_End = true;
             subscription.Id = "sub_569df922b4506cd73030";
 
-            Subscription updatedSubscription = susbscriptionService.UpdateSubscription(subscription);
+            Subscription updatedSubscription = await susbscriptionService.UpdateSubscriptionAsync(subscription);
 
             Console.WriteLine("SubscriptionID:" + updatedSubscription.Id);
             Console.Read();
         }
-        static void removeSubscription()
+        static async Task removeSubscription()
         {
             // se elimina correctamente pero el json de respuesta no devuelve vacio 
 
@@ -719,7 +724,7 @@ namespace SandboxConsole
             Console.WriteLine("Removing subscription...");
 
             string subscriptionID = "sub_569df922b4506cd73030";
-            bool reply = susbscriptionService.RemoveSubscription(subscriptionID);
+            bool reply = await susbscriptionService.RemoveSubscriptionAsync(subscriptionID);
 
             Console.WriteLine("Result remove:" + reply);
             Console.Read();

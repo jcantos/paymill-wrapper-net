@@ -1,7 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using PaymillWrapper.Models;
 using PaymillWrapper.Net;
 
@@ -17,9 +15,9 @@ namespace PaymillWrapper.Service
         /// This function allows request a refund list
         /// </summary>
         /// <returns>Returns a list refunds-object</returns>
-        public List<Refund> GetRefunds()
+        public async Task<List<Refund>> GetRefundsAsync()
         {
-            return getList<Refund>(Resource.Refunds);
+            return await GetListAsync(Resource.Refunds);
         }
 
         /// <summary>
@@ -27,19 +25,19 @@ namespace PaymillWrapper.Service
         /// </summary>
         /// <param name="filter">Result filtered in the required way</param>
         /// <returns>Returns a list refund-object</returns>
-        public List<Refund> GetRefunds(Filter filter)
+        public async Task<List<Refund>> GetRefundsAsync(Filter filter)
         {
-            return getList<Refund>(Resource.Refunds, filter);
+            return await GetListAsync(Resource.Refunds, filter);
         }
 
         /// <summary>
         /// This function creates a refund object
         /// </summary>
-        /// <param name="client">Object-refund</param>
+        /// <param name="refund">Object-refund</param>
         /// <returns>New object-refund just add</returns>
-        public Refund AddRefund(Refund refund)
+        public async Task<Refund> AddRefundAsync(Refund refund)
         {
-            return add<Refund>(
+            return await AddAsync(
                 Resource.Refunds,
                 refund,
                 refund.Transaction.Id,
@@ -47,13 +45,13 @@ namespace PaymillWrapper.Service
         }
 
         /// <summary>
-        /// To get the details of an object refund you’ll need to supply the refund ID
+        /// To GetAsync the details of an object refund you’ll need to supply the refund ID
         /// </summary>
-        /// <param name="clientID">Refund identifier</param>
+        /// <param name="refundID">Refund identifier</param>
         /// <returns>Refund-object</returns>
-        public Refund GetRefund(string refundID)
+        public async Task<Refund> GetRefundAsync(string refundID)
         {
-            return get<Refund>(Resource.Refunds, refundID);
+            return await GetAsync(Resource.Refunds, refundID);
         }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Web;
 using PaymillWrapper.Models;
 using PaymillWrapper.Net;
@@ -17,9 +18,9 @@ namespace PaymillWrapper.Service
         /// This function allows request a client list
         /// </summary>
         /// <returns>Returns a list clients-object</returns>
-        public List<Client> GetClients()
+        public async Task<List<Client>> GetClientsAsync()
         {
-            return getList<Client>(Resource.Clients);
+            return await GetListAsync(Resource.Clients);
         }
 
         /// <summary>
@@ -27,9 +28,9 @@ namespace PaymillWrapper.Service
         /// </summary>
         /// <param name="filter">Result filtered in the required way</param>
         /// <returns>Returns a list client-object</returns>
-        public List<Client> GetClients(Filter filter)
+        public async Task<List<Client>> GetClientsAsync(Filter filter)
         {
-            return getList<Client>(Resource.Clients, filter);
+            return await GetListAsync(Resource.Clients, filter);
         }
 
         /// <summary>
@@ -37,9 +38,9 @@ namespace PaymillWrapper.Service
         /// </summary>
         /// <param name="client">Object-client</param>
         /// <returns>New object-client just add</returns>
-        public Client AddClient(Client client)
+        public async Task<Client> AddClientAsync(Client client)
         {
-            return add<Client>(
+            return await AddAsync(
                 Resource.Clients,
                 client,
                 null,
@@ -47,13 +48,13 @@ namespace PaymillWrapper.Service
         }
         
         /// <summary>
-        /// To get the details of an existing client you’ll need to supply the client ID
+        /// To GetAsync the details of an existing client you’ll need to supply the client ID
         /// </summary>
         /// <param name="clientID">Client identifier</param>
         /// <returns>Client-object</returns>
-        public Client GetClient(string clientID)
+        public async Task<Client> GetClientAsync(string clientID)
         {
-            return get<Client>(Resource.Clients, clientID);
+            return await GetAsync(Resource.Clients, clientID);
         }
 
         /// <summary>
@@ -61,9 +62,9 @@ namespace PaymillWrapper.Service
         /// </summary>
         /// <param name="clientID">Client identifier</param>
         /// <returns>Return true if remove was ok, false if not possible</returns>
-        public bool RemoveClient(string clientID)
+        public async Task<bool> RemoveClientAsync(string clientID)
         {
-            return remove<Client>(Resource.Clients, clientID);
+            return await RemoveAsync(Resource.Clients, clientID);
         }
 
         /// <summary>
@@ -71,9 +72,9 @@ namespace PaymillWrapper.Service
         /// </summary>
         /// <param name="client">Object-client</param>
         /// <returns>Object-client just updated</returns>
-        public Client UpdateClient(Client client)
+        public async Task<Client> UpdateClientAsync(Client client)
         {
-            return update<Client>(
+            return await UpdateAsync(
                 Resource.Clients,
                 client,
                 client.Id,

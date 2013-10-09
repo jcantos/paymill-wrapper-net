@@ -1,7 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using PaymillWrapper.Models;
 using PaymillWrapper.Net;
 
@@ -17,9 +15,9 @@ namespace PaymillWrapper.Service
         /// This function allows request a subscription list
         /// </summary>
         /// <returns>Returns a list subscriptions-object</returns>
-        public List<Subscription> GetSubscriptions()
+        public async Task<List<Subscription>> GetSubscriptionsAsync()
         {
-            return getList<Subscription>(Resource.Subscriptions);
+            return await GetListAsync(Resource.Subscriptions);
         }
 
         /// <summary>
@@ -27,19 +25,19 @@ namespace PaymillWrapper.Service
         /// </summary>
         /// <param name="filter">Result filtered in the required way</param>
         /// <returns>Returns a list subscription-object</returns>
-        public List<Subscription> GetSubscriptions(Filter filter)
+        public async Task<List<Subscription>> GetSubscriptionsAsync(Filter filter)
         {
-            return getList<Subscription>(Resource.Subscriptions, filter);
+            return await GetListAsync(Resource.Subscriptions, filter);
         }
 
         /// <summary>
         /// This function creates a subscription object
         /// </summary>
-        /// <param name="client">Object-subscription</param>
+        /// <param name="subscription">Object-subscription</param>
         /// <returns>New object-subscription just add</returns>
-        public Subscription AddSubscription(Subscription subscription)
+        public async Task<Subscription> AddSubscriptionAsync(Subscription subscription)
         {
-            return add<Subscription>(
+            return await AddAsync(
                 Resource.Subscriptions,
                 subscription,
                 null,
@@ -47,33 +45,33 @@ namespace PaymillWrapper.Service
         }
 
         /// <summary>
-        /// To get the details of an existing subscription you’ll need to supply the subscription ID
+        /// To GetAsync the details of an existing subscription you’ll need to supply the subscription ID
         /// </summary>
-        /// <param name="clientID">Subscription identifier</param>
+        /// <param name="subscriptionID">Subscription identifier</param>
         /// <returns>Subscription-object</returns>
-        public Subscription GetSubscription(string subscriptionID)
+        public async Task<Subscription> GetSubscriptionAsync(string subscriptionID)
         {
-            return get<Subscription>(Resource.Subscriptions, subscriptionID);
+            return await GetAsync(Resource.Subscriptions, subscriptionID);
         }
 
         /// <summary>
         /// This function deletes a subscription
         /// </summary>
-        /// <param name="clientID">Subscription identifier</param>
+        /// <param name="subscriptionID">Subscription identifier</param>
         /// <returns>Return true if remove was ok, false if not possible</returns>
-        public bool RemoveSubscription(string subscriptionID)
+        public async Task<bool> RemoveSubscriptionAsync(string subscriptionID)
         {
-            return remove<Subscription>(Resource.Subscriptions, subscriptionID);
+            return await RemoveAsync(Resource.Subscriptions, subscriptionID);
         }
 
         /// <summary>
         /// This function updates the data of a subscription
         /// </summary>
-        /// <param name="client">Object-subscription</param>
+        /// <param name="subscription">Object-subscription</param>
         /// <returns>Object-subscription just updated</returns>
-        public Subscription UpdateSubscription(Subscription subscription)
+        public async Task<Subscription> UpdateSubscriptionAsync(Subscription subscription)
         {
-            return update<Subscription>(
+            return await UpdateAsync(
                 Resource.Subscriptions,
                 subscription,
                 subscription.Id,

@@ -24,9 +24,9 @@ namespace PaymillWrapper.Service
         /// This function allows request a payment list
         /// </summary>
         /// <returns>Returns a list payments-object</returns>
-        public List<Payment> GetPayments()
+        public async Task<List<Payment>> GetPaymentsAsync()
         {
-            return getList<Payment>(Resource.Payments);
+            return await GetListAsync(Resource.Payments);
         }
 
         /// <summary>
@@ -34,9 +34,9 @@ namespace PaymillWrapper.Service
         /// </summary>
         /// <param name="filter">Result filtered in the required way</param>
         /// <returns>Returns a list payments-object</returns>
-        public List<Payment> GetPayments(Filter filter)
+        public async Task<List<Payment>> GetPaymentsAsync(Filter filter)
         {
-            return getList<Payment>(Resource.Payments, filter);
+            return await GetListAsync(Resource.Payments, filter);
         }
 
         /// <summary>
@@ -44,9 +44,9 @@ namespace PaymillWrapper.Service
         /// </summary>
         /// <param name="client">Object-payment</param>
         /// <returns>New object-payment just add</returns>
-        public Payment AddPayment(Payment creditCardPayment)
+        public async Task<Payment> AddPaymentAsync(Payment creditCardPayment)
         {
-            return add<Payment>(
+            return await AddAsync(
                 Resource.Payments,
                 creditCardPayment,
                 null,
@@ -54,13 +54,13 @@ namespace PaymillWrapper.Service
         }
 
         /// <summary>
-        /// To get the details of an existing payment you’ll need to supply the payment ID
+        /// To GetAsync the details of an existing payment you’ll need to supply the payment ID
         /// </summary>
         /// <param name="clientID">Payment identifier</param>
         /// <returns>Payment-object</returns>
-        public Payment GetPayment(string paymentID)
+        public async Task<Payment> GetPaymentAsync(string paymentID)
         {
-            return get<Payment>(Resource.Payments, paymentID);
+            return await GetAsync(Resource.Payments, paymentID);
         }
 
         /// <summary>
@@ -68,9 +68,9 @@ namespace PaymillWrapper.Service
         /// </summary>
         /// <param name="clientID">Payment identifier</param>
         /// <returns>Return true if remove was ok, false if not possible</returns>
-        public bool RemovePayment(string paymentID)
+        public async Task<bool> RemovePaymentAsync(string paymentID)
         {
-            return remove<Payment>(Resource.Payments, paymentID);
+            return await RemoveAsync(Resource.Payments, paymentID);
         }
 
     }

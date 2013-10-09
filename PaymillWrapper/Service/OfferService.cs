@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Web;
 using PaymillWrapper.Models;
 using PaymillWrapper.Net;
@@ -17,9 +18,9 @@ namespace PaymillWrapper.Service
         /// This function allows request a offer list
         /// </summary>
         /// <returns>Returns a list offers-object</returns>
-        public List<Offer> GetOffers()
+        public async Task<List<Offer>> GetOffersAsync()
         {
-            return getList<Offer>(Resource.Offers);
+            return await GetListAsync(Resource.Offers);
         }
 
         /// <summary>
@@ -27,9 +28,9 @@ namespace PaymillWrapper.Service
         /// </summary>
         /// <param name="filter">Result filtered in the required way</param>
         /// <returns>Returns a list offer-object</returns>
-        public List<Offer> GetOffers(Filter filter)
+        public async Task<List<Offer>> GetOffersAsync(Filter filter)
         {
-            return getList<Offer>(Resource.Offers, filter);
+            return await GetListAsync(Resource.Offers, filter);
         }
 
         /// <summary>
@@ -37,9 +38,9 @@ namespace PaymillWrapper.Service
         /// </summary>
         /// <param name="client">Object-offer</param>
         /// <returns>New object-offer just add</returns>
-        public Offer AddOffer(Offer offer)
+        public async Task<Offer> AddOfferAsync(Offer offer)
         {
-            return add<Offer>(
+            return await AddAsync(
                 Resource.Offers,
                 offer,
                 null,
@@ -47,13 +48,13 @@ namespace PaymillWrapper.Service
         }
 
         /// <summary>
-        /// To get the details of an existing offer you’ll need to supply the offer ID
+        /// To GetAsync the details of an existing offer you’ll need to supply the offer ID
         /// </summary>
         /// <param name="clientID">Offer identifier</param>
         /// <returns>Offer-object</returns>
-        public Offer GetOffer(string offerID)
+        public async Task<Offer> GetOfferAsync(string offerID)
         {
-            return get<Offer>(Resource.Offers, offerID);
+            return await GetAsync(Resource.Offers, offerID);
         }
 
         /// <summary>
@@ -61,9 +62,9 @@ namespace PaymillWrapper.Service
         /// </summary>
         /// <param name="clientID">Offer identifier</param>
         /// <returns>Return true if remove was ok, false if not possible</returns>
-        public bool RemoveOffer(string offerID)
+        public async Task<bool> RemoveOfferAsync(string offerID)
         {
-            return remove<Offer>(Resource.Offers, offerID);
+            return await RemoveAsync(Resource.Offers, offerID);
         }
 
         /// <summary>
@@ -71,9 +72,9 @@ namespace PaymillWrapper.Service
         /// </summary>
         /// <param name="client">Object-offer</param>
         /// <returns>Object-offer just updated</returns>
-        public Offer UpdateOffer(Offer offer)
+        public async Task<Offer> UpdateOfferAsync(Offer offer)
         {
-            return update<Offer>(
+            return await UpdateAsync(
                 Resource.Offers,
                 offer,
                 offer.Id,
