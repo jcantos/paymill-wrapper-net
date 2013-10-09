@@ -60,5 +60,11 @@ namespace PaymillWrapper.Models
         /// </summary>
         [DataMember(Name = "Livemode")]
         public bool Livemode { get; set; }
+
+        /// <summary>
+        /// Response code.
+        /// </summary>
+        [DataMember(Name = "response_code")]
+        public ResponseCode ResponseCode { get; set; }
     }
 }

@@ -111,5 +111,11 @@ namespace PaymillWrapper.Models
         /// </summary>
         [DataMember(Name = "Preauthorization")]
         public Preauthorization Preauthorization { get; set; }
+
+        /// <summary>
+        /// Response code.
+        /// </summary>
+        [DataMember(Name = "response_code")]
+        public ResponseCode ResponseCode { get; set; }
     }
 }
