@@ -16,20 +16,11 @@ namespace PaymillWrapper.Service
         /// <summary>
         /// This function allows request a subscription list
         /// </summary>
-        /// <returns>Returns a list subscriptions-object</returns>
-        public async Task<List<Subscription>> GetSubscriptionsAsync()
-        {
-            return await GetListAsync(Resource.Subscriptions);
-        }
-
-        /// <summary>
-        /// This function allows request a subscription list
-        /// </summary>
         /// <param name="filter">Result filtered in the required way</param>
         /// <returns>Returns a list subscription-object</returns>
-        public async Task<List<Subscription>> GetSubscriptionsAsync(Filter filter)
+        public async Task<IReadOnlyCollection<Subscription>> GetAsync(Filter filter = null)
         {
-            return await GetListAsync(Resource.Subscriptions, filter);
+            return await GetAsync(Resource.Subscriptions, filter);
         }
 
         /// <summary>
@@ -37,7 +28,7 @@ namespace PaymillWrapper.Service
         /// </summary>
         /// <param name="subscription">Object-subscription</param>
         /// <returns>New object-subscription just add</returns>
-        public async Task<Subscription> AddSubscriptionAsync(Subscription subscription)
+        public async Task<Subscription> AddAsync(Subscription subscription)
         {
             return await AddAsync(
                 Resource.Subscriptions,
@@ -51,7 +42,7 @@ namespace PaymillWrapper.Service
         /// </summary>
         /// <param name="subscriptionId">Subscription identifier</param>
         /// <returns>Subscription-object</returns>
-        public async Task<Subscription> GetSubscriptionAsync(string subscriptionId)
+        public async Task<Subscription> GetAsync(string subscriptionId)
         {
             return await GetAsync(Resource.Subscriptions, subscriptionId);
         }
@@ -61,7 +52,7 @@ namespace PaymillWrapper.Service
         /// </summary>
         /// <param name="subscriptionId">Subscription identifier</param>
         /// <returns>Return true if remove was ok, false if not possible</returns>
-        public async Task<bool> RemoveSubscriptionAsync(string subscriptionId)
+        public async Task<bool> RemoveAsync(string subscriptionId)
         {
             return await RemoveAsync(Resource.Subscriptions, subscriptionId);
         }
@@ -71,7 +62,7 @@ namespace PaymillWrapper.Service
         /// </summary>
         /// <param name="subscription">Object-subscription</param>
         /// <returns>Object-subscription just updated</returns>
-        public async Task<Subscription> UpdateSubscriptionAsync(Subscription subscription)
+        public async Task<Subscription> UpdateAsync(Subscription subscription)
         {
             return await UpdateAsync(
                 Resource.Subscriptions,

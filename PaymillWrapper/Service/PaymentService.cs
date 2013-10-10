@@ -16,20 +16,11 @@ namespace PaymillWrapper.Service
         /// <summary>
         /// This function allows request a payment list
         /// </summary>
-        /// <returns>Returns a list payments-object</returns>
-        public async Task<List<Payment>> GetPaymentsAsync()
-        {
-            return await GetListAsync(Resource.Payments);
-        }
-
-        /// <summary>
-        /// This function allows request a payment list
-        /// </summary>
         /// <param name="filter">Result filtered in the required way</param>
         /// <returns>Returns a list payments-object</returns>
-        public async Task<List<Payment>> GetPaymentsAsync(Filter filter)
+        public async Task<IReadOnlyCollection<Payment>> GetAsync(Filter filter = null)
         {
-            return await GetListAsync(Resource.Payments, filter);
+            return await GetAsync(Resource.Payments, filter);
         }
 
         /// <summary>
@@ -37,7 +28,7 @@ namespace PaymillWrapper.Service
         /// </summary>
         /// <param name="creditCardPayment">Object-payment</param>
         /// <returns>New object-payment just add</returns>
-        public async Task<Payment> AddPaymentAsync(Payment creditCardPayment)
+        public async Task<Payment> AddAsync(Payment creditCardPayment)
         {
             return await AddAsync(
                 Resource.Payments,
@@ -51,7 +42,7 @@ namespace PaymillWrapper.Service
         /// </summary>
         /// <param name="paymentId">Payment identifier</param>
         /// <returns>Payment-object</returns>
-        public async Task<Payment> GetPaymentAsync(string paymentId)
+        public async Task<Payment> GetAsync(string paymentId)
         {
             return await GetAsync(Resource.Payments, paymentId);
         }
@@ -61,7 +52,7 @@ namespace PaymillWrapper.Service
         /// </summary>
         /// <param name="paymentId">Payment identifier</param>
         /// <returns>Return true if remove was ok, false if not possible</returns>
-        public async Task<bool> RemovePaymentAsync(string paymentId)
+        public async Task<bool> RemoveAsync(string paymentId)
         {
             return await RemoveAsync(Resource.Payments, paymentId);
         }

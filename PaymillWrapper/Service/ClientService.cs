@@ -16,20 +16,11 @@ namespace PaymillWrapper.Service
         /// <summary>
         /// This function allows request a client list
         /// </summary>
-        /// <returns>Returns a list clients-object</returns>
-        public async Task<List<Client>> GetClientsAsync()
-        {
-            return await GetListAsync(Resource.Clients);
-        }
-
-        /// <summary>
-        /// This function allows request a client list
-        /// </summary>
         /// <param name="filter">Result filtered in the required way</param>
-        /// <returns>Returns a list client-object</returns>
-        public async Task<List<Client>> GetClientsAsync(Filter filter)
+        /// <returns>Returns a list clients-object</returns>
+        public async Task<IReadOnlyCollection<Client>> GetAsync(Filter filter = null)
         {
-            return await GetListAsync(Resource.Clients, filter);
+            return await GetAsync(Resource.Clients, filter);
         }
 
         /// <summary>
@@ -37,7 +28,7 @@ namespace PaymillWrapper.Service
         /// </summary>
         /// <param name="client">Object-client</param>
         /// <returns>New object-client just add</returns>
-        public async Task<Client> AddClientAsync(Client client)
+        public async Task<Client> AddAsync(Client client)
         {
             return await AddAsync(
                 Resource.Clients,
@@ -51,7 +42,7 @@ namespace PaymillWrapper.Service
         /// </summary>
         /// <param name="clientId">Client identifier</param>
         /// <returns>Client-object</returns>
-        public async Task<Client> GetClientAsync(string clientId)
+        public async Task<Client> GetAsync(string clientId)
         {
             return await GetAsync(Resource.Clients, clientId);
         }
@@ -61,7 +52,7 @@ namespace PaymillWrapper.Service
         /// </summary>
         /// <param name="clientId">Client identifier</param>
         /// <returns>Return true if remove was ok, false if not possible</returns>
-        public async Task<bool> RemoveClientAsync(string clientId)
+        public async Task<bool> RemoveAsync(string clientId)
         {
             return await RemoveAsync(Resource.Clients, clientId);
         }
@@ -71,7 +62,7 @@ namespace PaymillWrapper.Service
         /// </summary>
         /// <param name="client">Object-client</param>
         /// <returns>Object-client just updated</returns>
-        public async Task<Client> UpdateClientAsync(Client client)
+        public async Task<Client> UpdateAsync(Client client)
         {
             return await UpdateAsync(
                 Resource.Clients,

@@ -16,20 +16,11 @@ namespace PaymillWrapper.Service
         /// <summary>
         /// This function allows request a preauthorization list
         /// </summary>
-        /// <returns>Returns a list preauthorizations-object</returns>
-        public async Task<List<Preauthorization>> GetPreauthorizationsAsync()
-        {
-            return await GetListAsync(Resource.Preauthorizations);
-        }
-
-        /// <summary>
-        /// This function allows request a preauthorization list
-        /// </summary>
         /// <param name="filter">Result filtered in the required way</param>
         /// <returns>Returns a list preauthorization-object</returns>
-        public async Task<List<Preauthorization>> GetPreauthorizationsAsync(Filter filter)
+        public async Task<IReadOnlyCollection<Preauthorization>> GetAsync(Filter filter = null)
         {
-            return await GetListAsync(Resource.Preauthorizations, filter);
+            return await GetAsync(Resource.Preauthorizations, filter);
         }
 
         /// <summary>
@@ -37,7 +28,7 @@ namespace PaymillWrapper.Service
         /// </summary>
         /// <param name="preauthorization">Object-transaction</param>
         /// <returns>New object-transaction just add</returns>
-        public async Task<Preauthorization> AddPreauthorizationAsync(Preauthorization preauthorization)
+        public async Task<Preauthorization> AddAsync(Preauthorization preauthorization)
         {
             Preauthorization reply=null;
 
@@ -58,7 +49,7 @@ namespace PaymillWrapper.Service
         /// </summary>
         /// <param name="preauthorizationId">Preauthorization identifier</param>
         /// <returns>Preauthorization-object</returns>
-        public async Task<Preauthorization> GetPreauthorizationAsync(string preauthorizationId)
+        public async Task<Preauthorization> GetAsync(string preauthorizationId)
         {
             return await GetAsync(Resource.Preauthorizations, preauthorizationId);
         }

@@ -1,28 +1,22 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2012
+# Visual Studio 2013
+VisualStudioVersion = 12.0.20827.3
+MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PaymillWrapper", "PaymillWrapper\PaymillWrapper.csproj", "{56D3C8FB-ED6E-4D9A-9472-704FF19A1BA5}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SandboxConsole", "SandboxConsole\SandboxConsole.csproj", "{DA75D7BC-8649-4A26-B4AA-AC6C5CBC33EF}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnitTest", "UnitTest\UnitTest.csproj", "{33477E75-1E7D-40F3-AFCD-473F96875053}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{B287F208-0F6D-4065-9583-4D21AAFBD774}"
+	ProjectSection(SolutionItems) = preProject
+		.nuget\NuGet.Config = .nuget\NuGet.Config
+		.nuget\NuGet.exe = .nuget\NuGet.exe
+		.nuget\NuGet.targets = .nuget\NuGet.targets
+	EndProjectSection
+EndProject
 Global
-	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 4
-		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
-		SccTeamFoundationServer = https://tfs.codeplex.com/tfs/tfs33
-		SccLocalPath0 = .
-		SccProjectUniqueName1 = PaymillWrapper\\PaymillWrapper.csproj
-		SccProjectName1 = PaymillWrapper
-		SccLocalPath1 = PaymillWrapper
-		SccProjectUniqueName2 = SandboxConsole\\SandboxConsole.csproj
-		SccProjectName2 = SandboxConsole
-		SccLocalPath2 = SandboxConsole
-		SccProjectUniqueName3 = UnitTest\\UnitTest.csproj
-		SccProjectName3 = UnitTest
-		SccLocalPath3 = UnitTest
-	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU

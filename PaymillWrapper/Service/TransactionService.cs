@@ -16,20 +16,11 @@ namespace PaymillWrapper.Service
         /// <summary>
         /// This function allows request a transaction list
         /// </summary>
-        /// <returns>Returns a list transactions-object</returns>
-        public async Task<List<Transaction>> GetTransactionsAsync()
-        {
-            return await GetListAsync(Resource.Transactions);
-        }
-
-        /// <summary>
-        /// This function allows request a transaction list
-        /// </summary>
         /// <param name="filter">Result filtered in the required way</param>
         /// <returns>Returns a list transaction-object</returns>
-        public async Task<List<Transaction>> GetTransactionsAsync(Filter filter)
+        public async Task<IReadOnlyCollection<Transaction>> GetAsync(Filter filter = null)
         {
-            return await GetListAsync(Resource.Transactions, filter);
+            return await GetAsync(Resource.Transactions, filter);
         }
 
         /// <summary>
@@ -37,7 +28,7 @@ namespace PaymillWrapper.Service
         /// </summary>
         /// <param name="transaction">Object-transaction</param>
         /// <returns>New object-transaction just add</returns>
-        public async Task<Transaction> AddTransactionAsync(Transaction transaction)
+        public async Task<Transaction> AddAsync(Transaction transaction)
         {
             return await AddAsync(
                 Resource.Transactions,
@@ -51,7 +42,7 @@ namespace PaymillWrapper.Service
         /// </summary>
         /// <param name="transactionId">Client identifier</param>
         /// <returns>Client-object</returns>
-        public async Task<Transaction> GetTransactionAsync(string transactionId)
+        public async Task<Transaction> GetAsync(string transactionId)
         {
             return await GetAsync(Resource.Transactions, transactionId);
         }

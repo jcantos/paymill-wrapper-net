@@ -16,20 +16,11 @@ namespace PaymillWrapper.Service
         /// <summary>
         /// This function allows request a refund list
         /// </summary>
-        /// <returns>Returns a list refunds-object</returns>
-        public async Task<List<Refund>> GetRefundsAsync()
-        {
-            return await GetListAsync(Resource.Refunds);
-        }
-
-        /// <summary>
-        /// This function allows request a refund list
-        /// </summary>
         /// <param name="filter">Result filtered in the required way</param>
         /// <returns>Returns a list refund-object</returns>
-        public async Task<List<Refund>> GetRefundsAsync(Filter filter)
+        public async Task<IReadOnlyCollection<Refund>> GetAsync(Filter filter = null)
         {
-            return await GetListAsync(Resource.Refunds, filter);
+            return await GetAsync(Resource.Refunds, filter);
         }
 
         /// <summary>
@@ -37,7 +28,7 @@ namespace PaymillWrapper.Service
         /// </summary>
         /// <param name="refund">Object-refund</param>
         /// <returns>New object-refund just add</returns>
-        public async Task<Refund> AddRefundAsync(Refund refund)
+        public async Task<Refund> AddAsync(Refund refund)
         {
             return await AddAsync(
                 Resource.Refunds,
@@ -51,7 +42,7 @@ namespace PaymillWrapper.Service
         /// </summary>
         /// <param name="refundId">Refund identifier</param>
         /// <returns>Refund-object</returns>
-        public async Task<Refund> GetRefundAsync(string refundId)
+        public async Task<Refund> GetAsync(string refundId)
         {
             return await GetAsync(Resource.Refunds, refundId);
         }

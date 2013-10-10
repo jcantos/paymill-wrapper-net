@@ -16,20 +16,11 @@ namespace PaymillWrapper.Service
         /// <summary>
         /// This function allows request a offer list
         /// </summary>
-        /// <returns>Returns a list offers-object</returns>
-        public async Task<List<Offer>> GetOffersAsync()
-        {
-            return await GetListAsync(Resource.Offers);
-        }
-
-        /// <summary>
-        /// This function allows request a offer list
-        /// </summary>
         /// <param name="filter">Result filtered in the required way</param>
         /// <returns>Returns a list offer-object</returns>
-        public async Task<List<Offer>> GetOffersAsync(Filter filter)
+        public async Task<IReadOnlyCollection<Offer>> GetAsync(Filter filter = null)
         {
-            return await GetListAsync(Resource.Offers, filter);
+            return await GetAsync(Resource.Offers, filter);
         }
 
         /// <summary>
@@ -37,7 +28,7 @@ namespace PaymillWrapper.Service
         /// </summary>
         /// <param name="offer">Object-offer</param>
         /// <returns>New object-offer just add</returns>
-        public async Task<Offer> AddOfferAsync(Offer offer)
+        public async Task<Offer> AddAsync(Offer offer)
         {
             return await AddAsync(
                 Resource.Offers,
@@ -51,7 +42,7 @@ namespace PaymillWrapper.Service
         /// </summary>
         /// <param name="offerId">Offer identifier</param>
         /// <returns>Offer-object</returns>
-        public async Task<Offer> GetOfferAsync(string offerId)
+        public async Task<Offer> GetAsync(string offerId)
         {
             return await GetAsync(Resource.Offers, offerId);
         }
@@ -61,7 +52,7 @@ namespace PaymillWrapper.Service
         /// </summary>
         /// <param name="offerId">Offer identifier</param>
         /// <returns>Return true if remove was ok, false if not possible</returns>
-        public async Task<bool> RemoveOfferAsync(string offerId)
+        public async Task<bool> RemoveAsync(string offerId)
         {
             return await RemoveAsync(Resource.Offers, offerId);
         }
@@ -71,7 +62,7 @@ namespace PaymillWrapper.Service
         /// </summary>
         /// <param name="offer">Object-offer</param>
         /// <returns>Object-offer just updated</returns>
-        public async Task<Offer> UpdateOfferAsync(Offer offer)
+        public async Task<Offer> UpdateAsync(Offer offer)
         {
             return await UpdateAsync(
                 Resource.Offers,

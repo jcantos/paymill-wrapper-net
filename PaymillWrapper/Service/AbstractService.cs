@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 using PaymillWrapper.Net;
 using Newtonsoft.Json;
@@ -31,7 +32,7 @@ namespace PaymillWrapper.Service
             _apiUrl = apiUrl;
         }
 
-        protected async Task<List<T>> GetListAsync(Resource resource, Filter filter)
+        protected async Task<IReadOnlyCollection<T>> GetAsync(Resource resource, Filter filter = null)
         {
             var requestUri = _apiUrl + "/" + resource.ToString().ToLower();
 
@@ -41,14 +42,13 @@ namespace PaymillWrapper.Service
             var response = await Client.GetAsync(requestUri);
             response.EnsureSuccessStatusCode();
             var jsonArray = await response.Content.ReadAsAsync<JObject>();
-            return JsonConvert.DeserializeObject<List<T>>(jsonArray["data"].ToString());
+            return JsonConvert.DeserializeObject<ReadOnlyCollection<T>>(jsonArray["data"].ToString());
         }
 
-        protected async Task<List<T>> GetListAsync(Resource resource)
-        {
-            return await GetListAsync(resource,null);
-        }
-
+        /// <summary>
+        /// Adds an "item". Use this call if the result returns a different class than you send in.
+        /// </summary>
+        /// <typeparam name="TResult">The resulting type.</typeparam>
         protected async Task<TResult> AddAsync<TResult>(Resource resource, object obj, string resourceId, string encodeParams)
         {
             var content = new StringContent(encodeParams);
@@ -66,6 +66,9 @@ namespace PaymillWrapper.Service
             return JsonConvert.DeserializeObject<TResult>(jsonArray["data"].ToString());
         }
 
+        /// <summary>
+        /// Adds an "item".
+        /// </summary>
         protected async Task<T> AddAsync(Resource resource, object obj, string resourceId, string encodeParams)
         {
             return await AddAsync<T>(resource, obj, resourceId, encodeParams);
