@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+﻿using System;
 using System.Net.Http;
 using System.Threading.Tasks;
 using PaymillWrapper.Models;
@@ -6,21 +6,26 @@ using PaymillWrapper.Net;
 
 namespace PaymillWrapper.Service
 {
-    public class PreauthorizationService : AbstractService<Preauthorization>
+    class PreauthorizationService : AbstractService<Preauthorization>
     {
-        public PreauthorizationService(HttpClient client, string apiUrl)
-            : base(client, apiUrl)
+        public PreauthorizationService(HttpClient client, string apiUrl) 
+            : base(Resource.Preauthorizations, client, apiUrl)
         {
         }
 
-        /// <summary>
-        /// This function allows request a preauthorization list
-        /// </summary>
-        /// <param name="filter">Result filtered in the required way</param>
-        /// <returns>Returns a list preauthorization-object</returns>
-        public async Task<IReadOnlyCollection<Preauthorization>> GetAsync(Filter filter = null)
+        protected override string GetResourceId(Preauthorization obj)
         {
-            return await GetAsync(Resource.Preauthorizations, filter);
+            return obj.Id;
+        }
+
+        protected override string GetEncodedCreateParams(Preauthorization obj, UrlEncoder encoder)
+        {
+            return encoder.EncodePreauthorization(obj);
+        }
+
+        protected override string GetEncodedUpdateParams(Preauthorization obj, UrlEncoder encoder)
+        {
+            throw new NotImplementedException();
         }
 
         /// <summary>
@@ -28,30 +33,16 @@ namespace PaymillWrapper.Service
         /// </summary>
         /// <param name="preauthorization">Object-transaction</param>
         /// <returns>New object-transaction just add</returns>
-        public async Task<Preauthorization> AddAsync(Preauthorization preauthorization)
+        public override async Task<Preauthorization> AddAsync(Preauthorization preauthorization)
         {
             Preauthorization reply=null;
 
-            var replyTransaction = await AddAsync<Transaction>(
-                Resource.Preauthorizations,
-                preauthorization,
-                null,
-                new UrlEncoder().EncodePreauthorization(preauthorization));
+            var replyTransaction = await AddAsync<Transaction>(preauthorization);
 
             if (replyTransaction != null)
                 reply = replyTransaction.Preauthorization;
 
             return reply;
-        }
-
-        /// <summary>
-        /// To GetAsync the details of an existing preauthorization you’ll need to supply the transaction ID
-        /// </summary>
-        /// <param name="preauthorizationId">Preauthorization identifier</param>
-        /// <returns>Preauthorization-object</returns>
-        public async Task<Preauthorization> GetAsync(string preauthorizationId)
-        {
-            return await GetAsync(Resource.Preauthorizations, preauthorizationId);
         }
     }
 }

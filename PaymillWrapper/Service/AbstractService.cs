@@ -10,31 +10,28 @@ using System.Net.Http.Headers;
 
 namespace PaymillWrapper.Service
 {
-    public abstract class AbstractService<T>
+    abstract class AbstractService<T> : ICRUDService<T>
     {
+        private readonly Resource _resource;
         protected readonly HttpClient Client;
         private readonly string _apiUrl;
 
-        public enum Resource
+        protected AbstractService(Resource resource, 
+            HttpClient client, 
+            string apiUrl)
         {
-            Clients,
-            Offers,
-            Payments,
-            Refunds,
-            Subscriptions,
-            Transactions,
-            Preauthorizations
-        }
-
-        protected AbstractService(HttpClient client, string apiUrl)
-        {
+            _resource = resource;
             Client = client;
             _apiUrl = apiUrl;
         }
 
-        protected async Task<IReadOnlyCollection<T>> GetAsync(Resource resource, Filter filter = null)
+        protected abstract string GetResourceId(T obj);
+        protected abstract string GetEncodedCreateParams(T obj, UrlEncoder encoder);
+        protected abstract string GetEncodedUpdateParams(T obj, UrlEncoder encoder);
+
+        public virtual async Task<IReadOnlyCollection<T>> GetAsync(Filter filter = null)
         {
-            var requestUri = _apiUrl + "/" + resource.ToString().ToLower();
+            var requestUri = _apiUrl + "/" + _resource.ToString().ToLower();
 
             if (filter != null)
                 requestUri += String.Format("?{0}", filter);
@@ -49,13 +46,14 @@ namespace PaymillWrapper.Service
         /// Adds an "item". Use this call if the result returns a different class than you send in.
         /// </summary>
         /// <typeparam name="TResult">The resulting type.</typeparam>
-        protected async Task<TResult> AddAsync<TResult>(Resource resource, object obj, string resourceId, string encodeParams)
+        protected async Task<TResult> AddAsync<TResult>(T obj)
         {
-            var content = new StringContent(encodeParams);
+            var content = new StringContent(GetEncodedCreateParams(obj, new UrlEncoder()));
             content.Headers.ContentType = new MediaTypeHeaderValue("application/x-www-form-urlencoded");
 
-            var requestUri = _apiUrl + "/" + resource.ToString().ToLower();
+            var requestUri = _apiUrl + "/" + _resource.ToString().ToLower();
 
+            var resourceId = GetResourceId(obj);
             if (!string.IsNullOrEmpty(resourceId))
                 requestUri += "/" + resourceId;
 
@@ -69,23 +67,23 @@ namespace PaymillWrapper.Service
         /// <summary>
         /// Adds an "item".
         /// </summary>
-        protected async Task<T> AddAsync(Resource resource, object obj, string resourceId, string encodeParams)
+        public virtual async Task<T> AddAsync(T obj)
         {
-            return await AddAsync<T>(resource, obj, resourceId, encodeParams);
+            return await AddAsync<T>(obj);
         }
 
-        protected async Task<T> GetAsync(Resource resource, string resourceId)
+        public virtual async Task<T> GetAsync(string resourceId)
         {
-            var requestUri = _apiUrl + "/" + resource.ToString().ToLower() + "/" + resourceId;
+            var requestUri = _apiUrl + "/" + _resource.ToString().ToLower() + "/" + resourceId;
             var response = await Client.GetAsync(requestUri);
             response.EnsureSuccessStatusCode();
             var jsonArray = await response.Content.ReadAsAsync<JObject>();
             return JsonConvert.DeserializeObject<T>(jsonArray["data"].ToString());
         }
 
-        protected async Task<bool> RemoveAsync(Resource resource, string resourceId)
+        public virtual async Task<bool> RemoveAsync(string resourceId)
         {
-            var requestUri = _apiUrl + "/" + resource.ToString().ToLower() + "/" + resourceId;
+            var requestUri = _apiUrl + "/" + _resource.ToString().ToLower() + "/" + resourceId;
             var response = await Client.DeleteAsync(requestUri);
             response.EnsureSuccessStatusCode();
             var jsonArray = await response.Content.ReadAsAsync<JObject>();
@@ -93,12 +91,12 @@ namespace PaymillWrapper.Service
             return r.Equals("[]");
         }
 
-        protected async Task<T> UpdateAsync(Resource resource, object obj, string resourceId, string encodeParams)
+        public virtual async Task<T> UpdateAsync(T obj)
         {
-            var content = new StringContent(encodeParams);
+            var content = new StringContent(GetEncodedUpdateParams(obj, new UrlEncoder()));
             content.Headers.ContentType = new MediaTypeHeaderValue("application/x-www-form-urlencoded");
 
-            var requestUri = _apiUrl + "/" + resource.ToString().ToLower() + "/" + resourceId;
+            var requestUri = _apiUrl + "/" + _resource.ToString().ToLower() + "/" + GetResourceId(obj);
             var response = await Client.PutAsync(requestUri, content);
             response.EnsureSuccessStatusCode();
             var jsonArray = await response.Content.ReadAsAsync<JObject>();

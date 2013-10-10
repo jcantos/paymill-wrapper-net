@@ -2,6 +2,7 @@
 using System;
 using System.Net.Http.Headers;
 using System.Text;
+using PaymillWrapper.Models;
 using PaymillWrapper.Service;
 
 namespace PaymillWrapper
@@ -18,66 +19,83 @@ namespace PaymillWrapper
 
             if (string.IsNullOrEmpty(ApiUrl))
                 throw new ArgumentException("You need to set an API URL.", "apiUrl");
+
+            _clients = new Lazy<AbstractService<Client>>(() => new ClientService(Client, ApiUrl));
+            _offers = new Lazy<AbstractService<Offer>>(() => new OfferService(Client, ApiUrl));
+            _payments = new Lazy<AbstractService<Payment>>(() => new PaymentService(Client, ApiUrl));
+            _preauthorizations = new Lazy<AbstractService<Preauthorization>>(() => new PreauthorizationService(Client, ApiUrl));
+            _refunds = new Lazy<AbstractService<Refund>>(() => new RefundService(Client, ApiUrl));
+            _subscriptions = new Lazy<AbstractService<Subscription>>(() => new SubscriptionService(Client, ApiUrl));
+            _transactions = new Lazy<AbstractService<Transaction>>(() => new TransactionService(Client, ApiUrl));
         }
 
-        private ClientService _clients;
-        private OfferService _offers;
-        private PaymentService _payments;
-        private PreauthorizationService _preauthorizations;
-        private RefundService _refunds;
-        private SubscriptionService _subscriptions;
-        private TransactionService _transactions;
         public string ApiKey { get; private set; }
         public string ApiUrl { get; private set; }
-        private HttpClient Client
+        private HttpClient _httpClient;
+        protected HttpClient Client
         {
             get
             {
-                var client = new HttpClient();
-                client.DefaultRequestHeaders.Accept
-                    .Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                if (_httpClient == null)
+                {
+                    _httpClient = new HttpClient();
+                    _httpClient.DefaultRequestHeaders.Accept
+                        .Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
-                var authInfo = ApiKey + ":";
-                authInfo = Convert.ToBase64String(Encoding.Default.GetBytes(authInfo));
-                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", authInfo);  
-
-                return client;
+                    var authInfo = ApiKey + ":";
+                    authInfo = Convert.ToBase64String(Encoding.Default.GetBytes(authInfo));
+                    _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", authInfo);  
+                }
+                
+                return _httpClient;
             }
         }
 
-        public ClientService Clients
+        #region Service members
+        private readonly Lazy<AbstractService<Client>> _clients;
+        private readonly Lazy<AbstractService<Offer>> _offers;
+        private readonly Lazy<AbstractService<Payment>> _payments;
+        private readonly Lazy<AbstractService<Preauthorization>> _preauthorizations;
+        private readonly Lazy<AbstractService<Refund>> _refunds;
+        private readonly Lazy<AbstractService<Subscription>> _subscriptions;
+        private readonly Lazy<AbstractService<Transaction>> _transactions;
+        #endregion
+
+        #region Public services
+        public ICRUDService<Client> Clients
         {
-            get { return _clients = _clients ?? new ClientService(Client, ApiUrl); }
+            get { return _clients.Value; }
         }
 
-        public OfferService Offers
+        public ICRUDService<Offer> Offers
         {
-            get { return _offers = _offers ?? new OfferService(Client, ApiUrl); }
+            get { return _offers.Value; }
         }
 
-        public PaymentService Payments
+        public ICRDService<Payment> Payments
         {
-            get { return _payments = _payments ?? new PaymentService(Client, ApiUrl); }
+            get { return _payments.Value; }
         }
 
-        public PreauthorizationService Preauthorizations
+        public ICRService<Preauthorization> Preauthorizations
         {
-            get { return _preauthorizations = _preauthorizations ?? new PreauthorizationService(Client, ApiUrl); }
+            get { return _preauthorizations.Value; }
         }
 
-        public RefundService Refunds
+        public ICRService<Refund> Refunds
         {
-            get { return _refunds = _refunds ?? new RefundService(Client, ApiUrl); }
+            get { return _refunds.Value; }
         }
 
-        public SubscriptionService Subscriptions
+        public ICRUDService<Subscription> Subscriptions
         {
-            get { return _subscriptions = _subscriptions ?? new SubscriptionService(Client, ApiUrl); }
+            get { return _subscriptions.Value; }
         }
 
-        public TransactionService Transactions
+        public ICRService<Transaction> Transactions
         {
-            get { return _transactions = _transactions ?? new TransactionService(Client, ApiUrl); }
+            get { return _transactions.Value; }
         }
+        #endregion
     }
 }

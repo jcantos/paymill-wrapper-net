@@ -68,8 +68,10 @@
     <Compile Include="Paymill.cs" />
     <Compile Include="PaymillException.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Service\Resource.cs" />
     <Compile Include="Service\AbstractService.cs" />
     <Compile Include="Service\ClientService.cs" />
+    <Compile Include="Service\ServiceInterfaces.cs" />
     <Compile Include="Service\PreauthorizationService.cs" />
     <Compile Include="Service\SubscriptionService.cs" />
     <Compile Include="Service\RefundService.cs" />

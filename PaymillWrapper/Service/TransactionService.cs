@@ -1,50 +1,29 @@
-﻿using System.Collections.Generic;
-using System.Net.Http;
-using System.Threading.Tasks;
+﻿using System.Net.Http;
 using PaymillWrapper.Models;
 using PaymillWrapper.Net;
 
 namespace PaymillWrapper.Service
 {
-    public class TransactionService : AbstractService<Transaction>
+    class TransactionService : AbstractService<Transaction>, ICRService<Transaction>
     {
         public TransactionService(HttpClient client, string apiUrl)
-            : base(client, apiUrl)
+            : base(Resource.Transactions, client, apiUrl)
         {
         }
 
-        /// <summary>
-        /// This function allows request a transaction list
-        /// </summary>
-        /// <param name="filter">Result filtered in the required way</param>
-        /// <returns>Returns a list transaction-object</returns>
-        public async Task<IReadOnlyCollection<Transaction>> GetAsync(Filter filter = null)
+        protected override string GetResourceId(Transaction obj)
         {
-            return await GetAsync(Resource.Transactions, filter);
+            return obj.Id;
         }
 
-        /// <summary>
-        /// This function creates a transaction object
-        /// </summary>
-        /// <param name="transaction">Object-transaction</param>
-        /// <returns>New object-transaction just add</returns>
-        public async Task<Transaction> AddAsync(Transaction transaction)
+        protected override string GetEncodedCreateParams(Transaction obj, UrlEncoder encoder)
         {
-            return await AddAsync(
-                Resource.Transactions,
-                transaction,
-                null,
-                new UrlEncoder().EncodeTransaction(transaction));
+            return encoder.EncodeTransaction(obj);
         }
 
-        /// <summary>
-        /// To GetAsync the details of an existing transaction you’ll need to supply the transaction ID
-        /// </summary>
-        /// <param name="transactionId">Client identifier</param>
-        /// <returns>Client-object</returns>
-        public async Task<Transaction> GetAsync(string transactionId)
+        protected override string GetEncodedUpdateParams(Transaction obj, UrlEncoder encoder)
         {
-            return await GetAsync(Resource.Transactions, transactionId);
+            throw new System.NotImplementedException();
         }
     }
 }
