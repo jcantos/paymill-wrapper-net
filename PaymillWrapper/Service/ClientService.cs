@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Net.Http;
 using System.Threading.Tasks;
 using PaymillWrapper.Models;
 using PaymillWrapper.Net;
@@ -7,7 +8,7 @@ namespace PaymillWrapper.Service
 {
     public class ClientService : AbstractService<Client>
     {
-        public ClientService(HttpClientRest client, string apiUrl)
+        public ClientService(HttpClient client, string apiUrl)
             : base(client, apiUrl)
         {
         }
@@ -42,27 +43,27 @@ namespace PaymillWrapper.Service
                 Resource.Clients,
                 client,
                 null,
-                new URLEncoder().Encode<Client>(client));
+                new UrlEncoder().Encode<Client>(client));
         }
         
         /// <summary>
         /// To GetAsync the details of an existing client you’ll need to supply the client ID
         /// </summary>
-        /// <param name="clientID">Client identifier</param>
+        /// <param name="clientId">Client identifier</param>
         /// <returns>Client-object</returns>
-        public async Task<Client> GetClientAsync(string clientID)
+        public async Task<Client> GetClientAsync(string clientId)
         {
-            return await GetAsync(Resource.Clients, clientID);
+            return await GetAsync(Resource.Clients, clientId);
         }
 
         /// <summary>
         /// This function deletes a client, but your transactions aren’t deleted
         /// </summary>
-        /// <param name="clientID">Client identifier</param>
+        /// <param name="clientId">Client identifier</param>
         /// <returns>Return true if remove was ok, false if not possible</returns>
-        public async Task<bool> RemoveClientAsync(string clientID)
+        public async Task<bool> RemoveClientAsync(string clientId)
         {
-            return await RemoveAsync(Resource.Clients, clientID);
+            return await RemoveAsync(Resource.Clients, clientId);
         }
 
         /// <summary>
@@ -76,7 +77,7 @@ namespace PaymillWrapper.Service
                 Resource.Clients,
                 client,
                 client.Id,
-                new URLEncoder().EncodeClientUpdate(client));
+                new UrlEncoder().EncodeClientUpdate(client));
         }
     }
 }

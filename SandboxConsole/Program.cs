@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 using PaymillWrapper;
 using PaymillWrapper.Models;
@@ -9,7 +8,7 @@ namespace SandboxConsole
 {
     class Program
     {
-        static void Main(string[] args)
+        static void Main()
         {
             AsyncMain().Wait();
 
@@ -18,7 +17,7 @@ namespace SandboxConsole
 
         static async Task AsyncMain()
         {
-            await getClientsWithParameters();
+            await GetClientsWithParameters();
         }
 
         private static Paymill CreatePaymillInstance()
@@ -27,260 +26,271 @@ namespace SandboxConsole
         }
 
         // payments
-        static async Task getPayments()
+        static async Task GetPayments()
         {
             // list payments
             Console.WriteLine("Waiting request list payments...");
 
-            List<Payment> lstPayments = await CreatePaymillInstance().Payments.GetPaymentsAsync();
+            var lstPayments = await CreatePaymillInstance().Payments.GetPaymentsAsync();
 
-            foreach (Payment payment in lstPayments)
+            foreach (var payment in lstPayments)
             {
-                Console.WriteLine(String.Format("PaymentID:{0}", payment.Id)); 
+                Console.WriteLine("PaymentID:{0}", payment.Id); 
             }
 
             Console.Read();
         }
-        static async Task getPaymentsWithParameters()
+        static async Task GetPaymentsWithParameters()
         {
             // list payments
             Console.WriteLine("Waiting request list payments with parameters...");
 
-            Filter filter = new Filter();
+            var filter = new Filter();
             filter.Add("count", 5);
             filter.Add("offset", 41);
 
-            List<Payment> lstPayments = await CreatePaymillInstance().Payments.GetPaymentsAsync(filter);
+            var lstPayments = await CreatePaymillInstance().Payments.GetPaymentsAsync(filter);
 
-            foreach (Payment payment in lstPayments)
+            foreach (var payment in lstPayments)
             {
-                Console.WriteLine(String.Format("PaymentID:{0}", payment.Id));
+                Console.WriteLine("PaymentID:{0}", payment.Id);
             }
 
             Console.Read();
         }
-        static async Task addCreditCardPayment()
+        static async Task AddCreditCardPayment()
         {
-            Payment payment = new Payment();
-            payment.Token = "098f6bcd4621d373cade4e832627b4f6";
+            var payment = new Payment {Token = "098f6bcd4621d373cade4e832627b4f6"};
 
-            Payment newPayment = await CreatePaymillInstance().Payments.AddPaymentAsync(payment);
+            var newPayment = await CreatePaymillInstance().Payments.AddPaymentAsync(payment);
 
-            Console.WriteLine("PaymentID:" + newPayment.Id);
+            Console.WriteLine("PaymentID:{0}", newPayment.Id);
             Console.Read();
         }
-        static async Task addCreditCardPaymentWithClient()
+        static async Task AddCreditCardPaymentWithClient()
         {
-            Payment payment = new Payment();
-            payment.Token = "098f6bcd4621d373cade4e832627b4f6";
-            payment.Client = "client_ad591663d69051d306a8";
+            var payment = new Payment
+            {
+                Token = "098f6bcd4621d373cade4e832627b4f6",
+                Client = "client_ad591663d69051d306a8"
+            };
 
-            Payment newPayment = await CreatePaymillInstance().Payments.AddPaymentAsync(payment);
+            var newPayment = await CreatePaymillInstance().Payments.AddPaymentAsync(payment);
 
-            Console.WriteLine("PaymentID:" + newPayment.Id);
-            Console.WriteLine("Created at:" + newPayment.Created_At);
+            Console.WriteLine("PaymentID:{0}", newPayment.Id);
+            Console.WriteLine("Created at:{0}", newPayment.CreatedAt);
             Console.Read();
         }
-        static async Task addDebitPayment()
+        static async Task AddDebitPayment()
         {
-            Payment payment = new Payment();
-            payment.Type = Payment.TypePayment.DEBIT;
-            payment.Code = "86055500";
-            payment.Account = "1234512345";
-            payment.Holder = "Max Mustermann";
+            var payment = new Payment
+            {
+                Type = Payment.TypePayment.Debit,
+                Code = "86055500",
+                Account = "1234512345",
+                Holder = "Max Mustermann"
+            };
 
-            Payment newPayment = await CreatePaymillInstance().Payments.AddPaymentAsync(payment);
+            var newPayment = await CreatePaymillInstance().Payments.AddPaymentAsync(payment);
 
-            Console.WriteLine("PaymentID:" + newPayment.Id);
-            Console.WriteLine("Created at:" + newPayment.Created_At);
+            Console.WriteLine("PaymentID:{0}", newPayment.Id);
+            Console.WriteLine("Created at:{0}", newPayment.CreatedAt);
             Console.Read();
         }
-        static async Task addDebitPaymentWithClient()
+        static async Task AddDebitPaymentWithClient()
         {
-            Payment payment = new Payment();
-            payment.Type = Payment.TypePayment.DEBIT;
-            payment.Code = "86055500";
-            payment.Account = "1234512345";
-            payment.Holder = "Max Mustermann";
-            payment.Client = "client_bbe895116de80b6141fd";
+            var payment = new Payment
+            {
+                Type = Payment.TypePayment.Debit,
+                Code = "86055500",
+                Account = "1234512345",
+                Holder = "Max Mustermann",
+                Client = "client_bbe895116de80b6141fd"
+            };
 
-            Payment newPayment = await CreatePaymillInstance().Payments.AddPaymentAsync(payment);
+            var newPayment = await CreatePaymillInstance().Payments.AddPaymentAsync(payment);
 
-            Console.WriteLine("PaymentID:" + newPayment.Id);
-            Console.WriteLine("Created at:" + newPayment.Created_At);
+            Console.WriteLine("PaymentID:{0}", newPayment.Id);
+            Console.WriteLine("Created at:{0}", newPayment.CreatedAt);
             Console.Read();
         }
-        static async Task getPayment()
+        static async Task GetPayment()
         {
-            string paymentID = "pay_4c159fe95d3be503778a";
-            Payment payment = await CreatePaymillInstance().Payments.GetPaymentAsync(paymentID);
+            const string paymentId = "pay_4c159fe95d3be503778a";
+            var payment = await CreatePaymillInstance().Payments.GetPaymentAsync(paymentId);
 
-            Console.WriteLine("PaymentID:" + payment.Id);
-            Console.WriteLine("PaymentID:" + payment.Created_At.ToShortDateString());
+            Console.WriteLine("PaymentID:{0}", payment.Id);
+            Console.WriteLine("PaymentID:{0}", payment.CreatedAt.ToShortDateString());
             Console.Read();
         }
-        static async Task removePayment()
+        static async Task RemovePayment()
         {
-            string paymentID = "pay_640be2127169cea1d375";
-            bool reply = await CreatePaymillInstance().Payments.RemovePaymentAsync(paymentID);
+            const string paymentId = "pay_640be2127169cea1d375";
+            var reply = await CreatePaymillInstance().Payments.RemovePaymentAsync(paymentId);
 
-            Console.WriteLine("Result remove:" + reply);
+            Console.WriteLine("Result remove:{0}", reply);
             Console.Read();
         }
 
         // transactions
-        static async Task getTransactions()
+        static async Task GetTransactions()
         {
             Console.WriteLine("Waiting request list transactions...");
-            List<Transaction> lstTransactions = await CreatePaymillInstance().Transactions.GetTransactionsAsync();
+            var lstTransactions = await CreatePaymillInstance().Transactions.GetTransactionsAsync();
 
-            foreach (Transaction transaction in lstTransactions)
+            foreach (var transaction in lstTransactions)
             {
-                Console.WriteLine(String.Format("TransactionID:{0}", transaction.Id));
+                Console.WriteLine("TransactionID:{0}", transaction.Id);
             }
 
             Console.Read();
         }
-        static async Task getTransactionsWithParameters()
+        static async Task GetTransactionsWithParameters()
         {
             Console.WriteLine("Waiting request list transactions with parameters...");
 
-            Filter filter = new Filter();
+            var filter = new Filter();
             filter.Add("count", 1);
             filter.Add("offset", 2);
 
-            List<Transaction> lstTransactions = await CreatePaymillInstance().Transactions.GetTransactionsAsync(filter);
+            var lstTransactions = await CreatePaymillInstance().Transactions.GetTransactionsAsync(filter);
 
-            foreach (Transaction transaction in lstTransactions)
+            foreach (var transaction in lstTransactions)
             {
-                Console.WriteLine(String.Format("TransactionID:{0}", transaction.Id));
+                Console.WriteLine("TransactionID:{0}", transaction.Id);
             }
 
             Console.Read();
         }
-        static async Task addTransaction()
+        static async Task AddTransaction()
         {
-            Transaction transaction = new Transaction();
-            transaction.Token = "098f6bcd4621d373cade4e832627b4f6";
-            transaction.Amount = 3500;
-            transaction.Currency = "EUR";
-            transaction.Description = "Prueba desde API c#";
+            var transaction = new Transaction
+            {
+                Token = "098f6bcd4621d373cade4e832627b4f6",
+                Amount = 3500,
+                Currency = "EUR",
+                Description = "Prueba desde API c#"
+            };
 
-            Transaction newTransaction = await CreatePaymillInstance().Transactions.AddTransactionAsync(transaction);
+            var newTransaction = await CreatePaymillInstance().Transactions.AddTransactionAsync(transaction);
 
-            Console.WriteLine("TransactionID:" + newTransaction.Id);
+            Console.WriteLine("TransactionID:{0}", newTransaction.Id);
             Console.Read();
         }
-        static async Task addTransactionWithPayment()
+        static async Task AddTransactionWithPayment()
         {
-            Transaction transaction = new Transaction();
-            transaction.Amount = 3500;
-            transaction.Currency = "EUR";
-            transaction.Description = "Prueba desde API c#";
-            transaction.Payment = new Payment() { Id = "pay_81ec02206e9b9c587513" };
+            var transaction = new Transaction
+            {
+                Amount = 3500,
+                Currency = "EUR",
+                Description = "Prueba desde API c#",
+                Payment = new Payment {Id = "pay_81ec02206e9b9c587513"}
+            };
 
-            Transaction newTransaction = await CreatePaymillInstance().Transactions.AddTransactionAsync(transaction);
+            var newTransaction = await CreatePaymillInstance().Transactions.AddTransactionAsync(transaction);
 
-            Console.WriteLine("TransactionID:" + newTransaction.Id);
+            Console.WriteLine("TransactionID:{0}", newTransaction.Id);
             Console.Read();
         }
-        static async Task addTransactionWithClient()
+        static async Task AddTransactionWithClient()
         {
             // Hay que depurar esta función, no funciona bien cuando se pasa el identificador del cliente, 
             // está creando un nuevo cliente aunque le pasemos el identificador de uno ya existente
 
-            Transaction transaction = new Transaction();
+            var transaction = new Transaction
+            {
+                Amount = 8000,
+                Currency = "EUR",
+                Description = "Transacción con cliente",
+                Payment = new Payment {Id = "pay_c08f1f94754b93f46ac3"},
+                Client = new Client {Id = "client_ad591663d69051d306a8"}
+            };
 
-            transaction.Amount = 8000;
-            transaction.Currency = "EUR";
-            transaction.Description = "Transacción con cliente";
-            transaction.Payment = new Payment() { Id = "pay_c08f1f94754b93f46ac3" };
-            transaction.Client = new Client() { Id = "client_ad591663d69051d306a8" };
+            var newTransaction = await CreatePaymillInstance().Transactions.AddTransactionAsync(transaction);
 
-            Transaction newTransaction = await CreatePaymillInstance().Transactions.AddTransactionAsync(transaction);
-
-            Console.WriteLine("TransactionID:" + newTransaction.Id);
+            Console.WriteLine("TransactionID:{0}", newTransaction.Id);
             Console.Read();
         }
-        static async Task getTransaction()
+        static async Task GetTransaction()
         {
             Console.WriteLine("Solicitando transaction...");
-            string transactionID = "tran_9255ee9ad5a7f2999625";
-            Transaction transaction = await CreatePaymillInstance().Transactions.GetTransactionAsync(transactionID);
+            const string transactionId = "tran_9255ee9ad5a7f2999625";
+            var transaction = await CreatePaymillInstance().Transactions.GetTransactionAsync(transactionId);
 
-            Console.WriteLine("TransactionID:" + transaction.Id);
-            Console.WriteLine("Created at:" + transaction.Created_At.ToShortDateString());
+            Console.WriteLine("TransactionID:{0}", transaction.Id);
+            Console.WriteLine("Created at:{0}", transaction.CreatedAt.ToShortDateString());
             Console.Read();
         }
 
         // preauthorizations
-        static async Task getPreauthorizations()
+        static async Task GetPreauthorizations()
         {
             Console.WriteLine("Waiting request list preauthorizations...");
-            List<Preauthorization> lstPreauthorizations = await CreatePaymillInstance().Preauthorizations.GetPreauthorizationsAsync();
+            var lstPreauthorizations = await CreatePaymillInstance().Preauthorizations.GetPreauthorizationsAsync();
 
-            foreach (Preauthorization preauthorization in lstPreauthorizations)
+            foreach (var preauthorization in lstPreauthorizations)
             {
-                Console.WriteLine(String.Format("PreauthorizationID:{0}", preauthorization.Id));
+                Console.WriteLine("PreauthorizationID:{0}", preauthorization.Id);
             }
 
             Console.Read();
         }
-        static async Task getPreauthorizationsWithParameters()
+        static async Task GetPreauthorizationsWithParameters()
         {
             Console.WriteLine("Waiting request list preauthorizations...");
 
-            Filter filter = new Filter();
+            var filter = new Filter();
             filter.Add("count", 1);
             filter.Add("offset", 2);
 
-            List<Preauthorization> lstPreauthorizations = await CreatePaymillInstance().Preauthorizations.GetPreauthorizationsAsync(filter);
+            var lstPreauthorizations = await CreatePaymillInstance().Preauthorizations.GetPreauthorizationsAsync(filter);
 
-            foreach (Preauthorization preauthorization in lstPreauthorizations)
+            foreach (var preauthorization in lstPreauthorizations)
             {
-                Console.WriteLine(String.Format("PreauthorizationID:{0}", preauthorization.Id));
+                Console.WriteLine("PreauthorizationID:{0}", preauthorization.Id);
             }
 
             Console.Read();
         }
-        static async Task addPreauthorization()
+        static async Task AddPreauthorization()
         {
-            Preauthorization preauthorization = new Preauthorization();
-            preauthorization.Amount = 3500;
-            preauthorization.Currency = "EUR";
-            //preauthorization.Token = "098f6bcd4621d373cade4e832627b4f6";
-            preauthorization.Payment = new Payment() { Id = "pay_4c159fe95d3be503778a" };
+            var preauthorization = new Preauthorization
+            {
+                Amount = 3500,
+                Currency = "EUR",
+                Payment = new Payment {Id = "pay_4c159fe95d3be503778a"}
+            };
 
-            Preauthorization newPreauthorization = await CreatePaymillInstance().Preauthorizations.AddPreauthorizationAsync(preauthorization);
+            var newPreauthorization = await CreatePaymillInstance().Preauthorizations.AddPreauthorizationAsync(preauthorization);
 
-            Console.WriteLine("PreauthorizationID:" + newPreauthorization.Id);
+            Console.WriteLine("PreauthorizationID:{0}", newPreauthorization.Id);
             Console.Read();
         }
-        static async Task getPreauthorization()
+        static async Task GetPreauthorization()
         {
             Console.WriteLine("Solicitando preauthorization...");
-            string preauthorizationID = "preauth_96fe414f466f91ddb266";
-            Preauthorization preauthorization = await CreatePaymillInstance().Preauthorizations.GetPreauthorizationAsync(preauthorizationID);
+            const string preauthorizationId = "preauth_96fe414f466f91ddb266";
+            var preauthorization = await CreatePaymillInstance().Preauthorizations.GetPreauthorizationAsync(preauthorizationId);
 
-            Console.WriteLine("PreauthorizationID:" + preauthorization.Id);
-            Console.WriteLine("Created at:" + preauthorization.Created_At.ToShortDateString());
+            Console.WriteLine("PreauthorizationID:{0}", preauthorization.Id);
+            Console.WriteLine("Created at:{0}", preauthorization.CreatedAt.ToShortDateString());
             Console.Read();
         }
 
         // refunds
-        static async Task getRefunds()
+        static async Task GetRefunds()
         {
             Console.WriteLine("Waiting request list refunds...");
-            List<Refund> lstRefunds = await CreatePaymillInstance().Refunds.GetRefundsAsync();
+            var lstRefunds = await CreatePaymillInstance().Refunds.GetRefundsAsync();
 
-            foreach (Refund refund in lstRefunds)
+            foreach (var refund in lstRefunds)
             {
-                Console.WriteLine(String.Format("RefundID:{0}", refund.Id));
+                Console.WriteLine("RefundID:{0}", refund.Id);
             }
 
             Console.Read();
         }
-        static async Task getRefundsWithParameters()
+        static async Task GetRefundsWithParameters()
         {
             // probar los parametros, no funciona bien
             // transaction es ok
@@ -291,142 +301,141 @@ namespace SandboxConsole
 
             Console.WriteLine("Waiting request list refunds with parameters...");
 
-            Filter filter = new Filter();
+            var filter = new Filter();
             filter.Add("count", 5);
 
-            List<Refund> lstRefunds = await CreatePaymillInstance().Refunds.GetRefundsAsync(filter);
+            var lstRefunds = await CreatePaymillInstance().Refunds.GetRefundsAsync(filter);
 
-            foreach (Refund refund in lstRefunds)
+            foreach (var refund in lstRefunds)
             {
-                Console.WriteLine(String.Format("RefundID:{0}", refund.Id));
+                Console.WriteLine("RefundID:{0}", refund.Id);
             }
 
             Console.Read();
         }
-        static async Task addRefund()
+        static async Task AddRefund()
         {
             // la documentación de la API está mal, devuelve un objeto Refund en vez de Transaction
 
-            Refund refund = new Refund();
-            refund.Amount = 500;
-            refund.Description = "Prueba desde API c#";
-            refund.Transaction = new Transaction() { Id = "tran_a7c93a1e5b431b52c0f0" };
+            var refund = new Refund
+            {
+                Amount = 500,
+                Description = "Prueba desde API c#",
+                Transaction = new Transaction {Id = "tran_a7c93a1e5b431b52c0f0"}
+            };
 
-            Refund newRefund = await CreatePaymillInstance().Refunds.AddRefundAsync(refund);
+            var newRefund = await CreatePaymillInstance().Refunds.AddRefundAsync(refund);
 
-            Console.WriteLine("RefundID:" + newRefund.Id);
+            Console.WriteLine("RefundID:{0}", newRefund.Id);
             Console.Read();
         }
-        static async Task getRefund()
+        static async Task GetRefund()
         {
             Console.WriteLine("Request refund...");
-            string refundID = "refund_53860aa0e514d4913aad";
-            Refund refund = await CreatePaymillInstance().Refunds.GetRefundAsync(refundID);
+            const string refundId = "refund_53860aa0e514d4913aad";
+            var refund = await CreatePaymillInstance().Refunds.GetRefundAsync(refundId);
 
-            Console.WriteLine("RefundID:" + refund.Id);
-            Console.WriteLine("Created at:" + refund.Created_At.ToShortDateString());
+            Console.WriteLine("RefundID:{0}", refund.Id);
+            Console.WriteLine("Created at:{0}", refund.CreatedAt.ToShortDateString());
             Console.Read();
         }
 
         // clients
-        static async Task getClients()
+        static async Task GetClients()
         {
             Console.WriteLine("Waiting request list clients...");
-            List<Client> lstClients = await CreatePaymillInstance().Clients.GetClientsAsync();
+            var lstClients = await CreatePaymillInstance().Clients.GetClientsAsync();
 
-            foreach (Client c in lstClients)
+            foreach (var c in lstClients)
             {
-                Console.WriteLine(String.Format("ClientID:{0}", c.Id));
+                Console.WriteLine("ClientID:{0}", c.Id);
             }
 
             Console.Read();
         }
-        static async Task getClientsWithParameters()
+        static async Task GetClientsWithParameters()
         {
             Console.WriteLine("Waiting request list clients with parameters...");
 
-            Filter filter = new Filter();
+            var filter = new Filter();
             //filter.Add("email", "javicantos22@hotmail.es"); //OK
             //filter.Add("creditcard", "pay_f95c7d70c6ad8da339e5"); //KO
             filter.Add("created_at", 1352930695); //KO
 
-            List<Client> lstClients = await CreatePaymillInstance().Clients.GetClientsAsync(filter);
+            var lstClients = await CreatePaymillInstance().Clients.GetClientsAsync(filter);
 
-            foreach (Client c in lstClients)
+            foreach (var c in lstClients)
             {
-                Console.WriteLine(String.Format("ClientID:{0}", c.Id));
+                Console.WriteLine("ClientID:{0}", c.Id);
             }
 
             Console.Read();
         }
-        static async Task addClient()
+        static async Task AddClient()
         {
-            Client c = new Client();
-            c.Description = "Prueba API";
-            c.Email = "javicantos22@hotmail.es";
+            var c = new Client {Description = "Prueba API", Email = "javicantos22@hotmail.es"};
 
-            Client newClient = await CreatePaymillInstance().Clients.AddClientAsync(c);
+            var newClient = await CreatePaymillInstance().Clients.AddClientAsync(c);
 
-            Console.WriteLine("ClientID:" + newClient.Id);
+            Console.WriteLine("ClientID:{0}", newClient.Id);
             Console.Read();
         }
-        static async Task getClient()
+        static async Task GetClient()
         {
             Console.WriteLine("Request client...");
-            string clientID = "client_ad591663d69051d306a8";
-            Client c = await CreatePaymillInstance().Clients.GetClientAsync(clientID);
+            const string clientId = "client_ad591663d69051d306a8";
+            var c = await CreatePaymillInstance().Clients.GetClientAsync(clientId);
 
-            Console.WriteLine("ClientID:" + c.Id);
-            Console.WriteLine("Created at:" + c.Created_At.ToShortDateString());
+            Console.WriteLine("ClientID:{0}", c.Id);
+            Console.WriteLine("Created at:{0}", c.CreatedAt.ToShortDateString());
             Console.Read();
         }
-        static async Task updateClient()
+        static async Task UpdateClient()
         {
-            Client c = new Client();
-            c.Description = "Javier";
-            c.Email = "javicantos33@hotmail.es";
-            c.Id = "client_bbe895116de80b6141fd";
+            var c = new Client
+            {
+                Description = "Javier",
+                Email = "javicantos33@hotmail.es",
+                Id = "client_bbe895116de80b6141fd"
+            };
 
-            Client updatedClient = await CreatePaymillInstance().Clients.UpdateClientAsync(c);
+            var updatedClient = await CreatePaymillInstance().Clients.UpdateClientAsync(c);
 
-            Console.WriteLine("ClientID:" + updatedClient.Id);
+            Console.WriteLine("ClientID:{0}", updatedClient.Id);
             Console.Read();
         }
-        static async Task removeClient()
+        static async Task RemoveClient()
         {
             // lo borra pero no devuelve blanco
             // devuelve el objeto cliente con el identificador pasado por parametro
 
             Console.WriteLine("Removing client...");
 
-            string clientID = "client_180ad3d1042a1da4a0a0";
-            bool reply = await CreatePaymillInstance().Clients.RemoveClientAsync(clientID);
+            const string clientId = "client_180ad3d1042a1da4a0a0";
+            var reply = await CreatePaymillInstance().Clients.RemoveClientAsync(clientId);
 
-            Console.WriteLine("Result remove:" + reply);
+            Console.WriteLine("Result remove:{0}", reply);
             Console.Read();
         }
 
         // offers
-        static async Task getOffers()
+        static async Task GetOffers()
         {
             Console.WriteLine("Waiting request list offers...");
-            List<Offer> lstOffers = await CreatePaymillInstance().Offers.GetOffersAsync();
+            var lstOffers = await CreatePaymillInstance().Offers.GetOffersAsync();
 
-            foreach (Offer o in lstOffers)
+            foreach (var o in lstOffers)
             {
-                Console.WriteLine(String.Format("OfferID:{0}", o.Id));
+                Console.WriteLine("OfferID:{0}", o.Id);
             }
 
             Console.Read();
         }
-        static async Task getOffersWithParameters()
+        static async Task GetOffersWithParameters()
         {
             Console.WriteLine("Waiting request list offers with parameters...");
 
-            DateTime epoch = new DateTime(1970, 1, 1, 0, 0, 0, 0).ToLocalTime();
-            TimeSpan span = (new DateTime(2012,11,28,18,38,33) - epoch);
-
-            Filter filter = new Filter();
+            var filter = new Filter();
             filter.Add("count", 1); //OK
             filter.Add("offset", 2); //OK
             //filter.Add("interval","month"); //OK
@@ -434,137 +443,145 @@ namespace SandboxConsole
             //filter.Add("created_at", span.TotalSeconds.ToString()); //KO
             //filter.Add("trial_period_days", 5); //OK
 
-            List<Offer> lstOffers = await CreatePaymillInstance().Offers.GetOffersAsync(filter);
+            var lstOffers = await CreatePaymillInstance().Offers.GetOffersAsync(filter);
 
-            foreach (Offer o in lstOffers)
+            foreach (var o in lstOffers)
             {
-                Console.WriteLine(String.Format("OfferID:{0}", o.Id));
+                Console.WriteLine("OfferID:{0}", o.Id);
             }
 
             Console.Read();
         }
-        static async Task addOffer()
+        static async Task AddOffer()
         {
-            Offer offer = new Offer();
-            offer.Amount = 1500;
-            offer.Currency = "eur";
-            offer.Interval = Offer.TypeInterval.MONTH;
-            offer.Name = "Prueba API";
-            offer.Trial_Period_Days = 3;
+            var offer = new Offer
+            {
+                Amount = 1500,
+                Currency = "eur",
+                Interval = Offer.TypeInterval.Month,
+                Name = "Prueba API",
+                TrialPeriodDays = 3
+            };
 
-            Offer newOffer = await CreatePaymillInstance().Offers.AddOfferAsync(offer);
+            var newOffer = await CreatePaymillInstance().Offers.AddOfferAsync(offer);
 
-            Console.WriteLine("OfferID:" + newOffer.Id);
+            Console.WriteLine("OfferID:{0}", newOffer.Id);
             Console.Read();
         }
-        static async Task getOffer()
+        static async Task GetOffer()
         {
             Console.WriteLine("Request offer...");
-            string offerID = "offer_6eea405f83d4d3098604";
-            Offer offer = await CreatePaymillInstance().Offers.GetOfferAsync(offerID);
+            const string offerId = "offer_6eea405f83d4d3098604";
+            var offer = await CreatePaymillInstance().Offers.GetOfferAsync(offerId);
 
-            Console.WriteLine("OfferID:" + offer.Id);
-            Console.WriteLine("Created at:" + offer.Created_At.ToShortDateString());
+            Console.WriteLine("OfferID:{0}", offer.Id);
+            Console.WriteLine("Created at:{0}", offer.CreatedAt.ToShortDateString());
             Console.Read();
         }
-        static async Task updateOffer()
+        static async Task UpdateOffer()
         {
-            Offer offer = new Offer();
-            offer.Name = "Oferta 48";
-            offer.Id = "offer_6eea405f83d4d3098604";
+            var offer = new Offer
+            {
+                Name = "Oferta 48", 
+                Id = "offer_6eea405f83d4d3098604"
+            };
 
-            Offer updatedOffer = await CreatePaymillInstance().Offers.UpdateOfferAsync(offer);
+            var updatedOffer = await CreatePaymillInstance().Offers.UpdateOfferAsync(offer);
 
-            Console.WriteLine("OfferID:" + updatedOffer.Id);
+            Console.WriteLine("OfferID:{0}", updatedOffer.Id);
             Console.Read();
         }
-        static async Task removeOffer()
+        static async Task RemoveOffer()
         {
             Console.WriteLine("Removing offer...");
 
-            string offerID = "offer_6eea405f83d4d3098604";
-            bool reply = await CreatePaymillInstance().Offers.RemoveOfferAsync(offerID);
+            const string offerId = "offer_6eea405f83d4d3098604";
+            var reply = await CreatePaymillInstance().Offers.RemoveOfferAsync(offerId);
 
-            Console.WriteLine("Result remove:" + reply);
+            Console.WriteLine("Result remove:{0}", reply);
             Console.Read();
         }
 
         // subscriptions
-        static async Task getSubscriptions()
+        static async Task GetSubscriptions()
         {
             Console.WriteLine("Waiting request list subscriptions...");
-            List<Subscription> lstSubscriptions = await CreatePaymillInstance().Subscriptions.GetSubscriptionsAsync();
+            var lstSubscriptions = await CreatePaymillInstance().Subscriptions.GetSubscriptionsAsync();
 
-            foreach (Subscription s in lstSubscriptions)
+            foreach (var s in lstSubscriptions)
             {
-                Console.WriteLine(String.Format("SubscriptionID:{0}", s.Id));
+                Console.WriteLine("SubscriptionID:{0}", s.Id);
             }
 
             Console.Read();
         }
-        static async Task getSubscriptionsWithParameters()
+        static async Task GetSubscriptionsWithParameters()
         {
             Console.WriteLine("Waiting request list subscriptions with parameters...");
 
-            Filter filter = new Filter();
+            var filter = new Filter();
             filter.Add("count", 1); //OK
             filter.Add("offset", 2); //OK
             //filter.Add("offer", "offer_32008ddd39954e71ed48"); //KO
             //filter.Add("canceled_at", 495); //KO
             //filter.Add("created_at", 1353194860); //KO
 
-            List<Subscription> lstSubscriptions = await CreatePaymillInstance().Subscriptions.GetSubscriptionsAsync(filter);
+            var lstSubscriptions = await CreatePaymillInstance().Subscriptions.GetSubscriptionsAsync(filter);
 
-            foreach (Subscription s in lstSubscriptions)
+            foreach (var s in lstSubscriptions)
             {
-                Console.WriteLine(String.Format("SubscriptionID:{0}", s.Id));
+                Console.WriteLine("SubscriptionID:{0}", s.Id);
             }
 
             Console.Read();
         }
-        static async Task addSubscription()
+        static async Task AddSubscription()
         {
-            Subscription subscription = new Subscription();
-            subscription.Client = new Client() { Id = "client_bbe895116de80b6141fd" };
-            subscription.Offer = new Offer() { Id = "offer_32008ddd39954e71ed48" };
-            subscription.Payment = new Payment() { Id = "pay_81ec02206e9b9c587513" };
+            var subscription = new Subscription
+            {
+                Client = new Client {Id = "client_bbe895116de80b6141fd"},
+                Offer = new Offer {Id = "offer_32008ddd39954e71ed48"},
+                Payment = new Payment {Id = "pay_81ec02206e9b9c587513"}
+            };
 
-            Subscription newSubscription = await CreatePaymillInstance().Subscriptions.AddSubscriptionAsync(subscription);
+            var newSubscription = await CreatePaymillInstance().Subscriptions.AddSubscriptionAsync(subscription);
 
-            Console.WriteLine("SubscriptionID:" + newSubscription.Id);
+            Console.WriteLine("SubscriptionID:{0}", newSubscription.Id);
             Console.Read();
         }
-        static async Task getSubscription()
+        static async Task GetSubscription()
         {
             Console.WriteLine("Request subscription...");
-            string subscriptionID = "sub_e77d3332e456674101ad";
-            Subscription subscription = await CreatePaymillInstance().Subscriptions.GetSubscriptionAsync(subscriptionID);
+            const string subscriptionId = "sub_e77d3332e456674101ad";
+            var subscription = await CreatePaymillInstance().Subscriptions.GetSubscriptionAsync(subscriptionId);
 
-            Console.WriteLine("SubscriptionID:" + subscription.Id);
-            Console.WriteLine("Created at:" + subscription.Created_At.ToShortDateString());
+            Console.WriteLine("SubscriptionID:{0}", subscription.Id);
+            Console.WriteLine("Created at:{0}", subscription.CreatedAt.ToShortDateString());
             Console.Read();
         }
-        static async Task updateSubscription()
+        static async Task UpdateSubscription()
         {
-            Subscription subscription = new Subscription();
-            subscription.Cancel_At_Period_End = true;
-            subscription.Id = "sub_569df922b4506cd73030";
+            var subscription = new Subscription
+            {
+                CancelAtPeriodEnd = true, 
+                Id = "sub_569df922b4506cd73030"
+            };
 
-            Subscription updatedSubscription = await CreatePaymillInstance().Subscriptions.UpdateSubscriptionAsync(subscription);
+            var updatedSubscription = await CreatePaymillInstance().Subscriptions.UpdateSubscriptionAsync(subscription);
 
-            Console.WriteLine("SubscriptionID:" + updatedSubscription.Id);
+            Console.WriteLine("SubscriptionID:{0}", updatedSubscription.Id);
             Console.Read();
         }
-        static async Task removeSubscription()
+        static async Task RemoveSubscription()
         {
             // se elimina correctamente pero el json de respuesta no devuelve vacio 
 
             Console.WriteLine("Removing subscription...");
 
-            string subscriptionID = "sub_569df922b4506cd73030";
-            bool reply = await CreatePaymillInstance().Subscriptions.RemoveSubscriptionAsync(subscriptionID);
+            const string subscriptionId = "sub_569df922b4506cd73030";
+            var reply = await CreatePaymillInstance().Subscriptions.RemoveSubscriptionAsync(subscriptionId);
 
-            Console.WriteLine("Result remove:" + reply);
+            Console.WriteLine("Result remove:{0}", reply);
             Console.Read();
         }
     }

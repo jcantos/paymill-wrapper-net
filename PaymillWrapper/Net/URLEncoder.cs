@@ -1,19 +1,17 @@
 ﻿using PaymillWrapper.Models;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 using System.Web;
 
 namespace PaymillWrapper.Net
 {
-    public class URLEncoder
+    public class UrlEncoder
     {
-        private Encoding charset;
+        private readonly Encoding _charset;
 
-        public URLEncoder()
+        public UrlEncoder()
         {
-            charset = Encoding.UTF8;
+            _charset = Encoding.UTF8;
         }
 
         public string Encode<T>(Object data)
@@ -23,15 +21,15 @@ namespace PaymillWrapper.Net
             if (!data.GetType().ToString().StartsWith("PaymillWrapper.Models"))
                 throw new PaymillException(
                     String.Format("Unknown object type '{0}'. Only objects in package " +
-                    "'PaymillWrapper.Paymill.Model' are supported.", data.GetType().ToString())
+                    "'PaymillWrapper.Paymill.Model' are supported.", data.GetType())
                     );
 
-            StringBuilder sb = new StringBuilder();
+            var sb = new StringBuilder();
             foreach (var prop in props)
             {
-                object value = prop.GetValue(data, null);
+                var value = prop.GetValue(data, null);
                 if (value != null)
-                    this.addKeyValuePair(sb, prop.Name.ToLower(), value);
+                    AddKeyValuePair(sb, prop.Name.ToLower(), value);
             }
 
             return sb.ToString();
@@ -39,120 +37,120 @@ namespace PaymillWrapper.Net
 
         public string EncodeTransaction(Transaction data)
         {
-            StringBuilder sb = new StringBuilder();
+            var sb = new StringBuilder();
 
-            this.addKeyValuePair(sb, "amount", data.Amount);
-            this.addKeyValuePair(sb, "currency", data.Currency);
+            AddKeyValuePair(sb, "amount", data.Amount);
+            AddKeyValuePair(sb, "currency", data.Currency);
 
             if (!string.IsNullOrEmpty(data.Token))
-                this.addKeyValuePair(sb, "token", data.Token);
+                AddKeyValuePair(sb, "token", data.Token);
 
             if (data.Client != null && !string.IsNullOrEmpty(data.Client.Id))
-                this.addKeyValuePair(sb, "client", data.Client.Id);
+                AddKeyValuePair(sb, "client", data.Client.Id);
 
             if (data.Payment != null && !string.IsNullOrEmpty(data.Payment.Id))
-                this.addKeyValuePair(sb, "payment", data.Payment.Id);
+                AddKeyValuePair(sb, "payment", data.Payment.Id);
 
-            this.addKeyValuePair(sb, "description", data.Description);
+            AddKeyValuePair(sb, "description", data.Description);
             
             return sb.ToString();
         }
         public string EncodePreauthorization(Preauthorization data)
         {
-            StringBuilder sb = new StringBuilder();
+            var sb = new StringBuilder();
 
-            this.addKeyValuePair(sb, "amount", data.Amount);
-            this.addKeyValuePair(sb, "currency", data.Currency);
+            AddKeyValuePair(sb, "amount", data.Amount);
+            AddKeyValuePair(sb, "currency", data.Currency);
 
             if (!string.IsNullOrEmpty(data.Token))
-                this.addKeyValuePair(sb, "token", data.Token);
+                AddKeyValuePair(sb, "token", data.Token);
 
             if (data.Payment != null && !string.IsNullOrEmpty(data.Payment.Id))
-                this.addKeyValuePair(sb, "payment", data.Payment.Id);
+                AddKeyValuePair(sb, "payment", data.Payment.Id);
 
             return sb.ToString();
         }
         public string EncodeRefund(Refund data)
         {
-            StringBuilder sb = new StringBuilder();
+            var sb = new StringBuilder();
 
-            this.addKeyValuePair(sb, "amount", data.Amount);
-            this.addKeyValuePair(sb, "description", data.Description);
+            AddKeyValuePair(sb, "amount", data.Amount);
+            AddKeyValuePair(sb, "description", data.Description);
 
             return sb.ToString();
         }
         public string EncodeOfferAdd(Offer data)
         {
-            StringBuilder sb = new StringBuilder();
+            var sb = new StringBuilder();
 
-            this.addKeyValuePair(sb, "amount", data.Amount);
-            this.addKeyValuePair(sb, "currency", data.Currency);
-            this.addKeyValuePair(sb, "interval", data.Interval);
-            this.addKeyValuePair(sb, "name", data.Name);
+            AddKeyValuePair(sb, "amount", data.Amount);
+            AddKeyValuePair(sb, "currency", data.Currency);
+            AddKeyValuePair(sb, "interval", data.Interval);
+            AddKeyValuePair(sb, "name", data.Name);
 
             return sb.ToString();
         }
         public string EncodeOfferUpdate(Offer data)
         {
-            StringBuilder sb = new StringBuilder();
+            var sb = new StringBuilder();
 
-            this.addKeyValuePair(sb, "name", data.Name);
+            AddKeyValuePair(sb, "name", data.Name);
 
             return sb.ToString();
         }
         public string EncodeSubscriptionAdd(Subscription data)
         {
-            StringBuilder sb = new StringBuilder();
+            var sb = new StringBuilder();
 
             if (data.Client != null)
-                this.addKeyValuePair(sb, "client", data.Client.Id);
+                AddKeyValuePair(sb, "client", data.Client.Id);
             if (data.Offer != null)
-                this.addKeyValuePair(sb, "offer", data.Offer.Id);
+                AddKeyValuePair(sb, "offer", data.Offer.Id);
             if (data.Payment != null)
-                this.addKeyValuePair(sb, "payment", data.Payment.Id);
+                AddKeyValuePair(sb, "payment", data.Payment.Id);
 
             return sb.ToString();
         }
         public string EncodeSubscriptionUpdate(Subscription data)
         {
-            StringBuilder sb = new StringBuilder();
+            var sb = new StringBuilder();
 
-            this.addKeyValuePair(sb, "cancel_at_period_end", data.Cancel_At_Period_End);
+            AddKeyValuePair(sb, "cancel_at_period_end", data.CancelAtPeriodEnd);
 
             return sb.ToString();
         }
         public string EncodeClientUpdate(Client data)
         {
-            StringBuilder sb = new StringBuilder();
+            var sb = new StringBuilder();
 
-            this.addKeyValuePair(sb, "email", data.Email);
-            this.addKeyValuePair(sb, "description", data.Description);
+            AddKeyValuePair(sb, "email", data.Email);
+            AddKeyValuePair(sb, "description", data.Description);
 
             return sb.ToString();
         }
 
-        private void addKeyValuePair(StringBuilder sb, string key, object value)
+        private void AddKeyValuePair(StringBuilder sb, string key, object value)
         {
-            string reply = "";
+            var reply = "";
 
             if (value == null) return;
 
             try
             {
 
-                key = HttpUtility.UrlEncode(key.ToLower(), this.charset);
+                key = HttpUtility.UrlEncode(key.ToLower(), _charset);
 
                 if (value.GetType().IsEnum)
                 {
                     reply = value.ToString().ToLower();
                 }
-                else if (value.GetType().Equals(typeof(DateTime)))
+                else if (value is DateTime)
                 {
                     if (value.Equals(DateTime.MinValue)) reply="";
                 }
                 else
                 {
-                    reply = HttpUtility.UrlEncode(value.ToString(), this.charset);
+                    reply = HttpUtility.UrlEncode(value.ToString(), _charset);
                 }
 
                 if (!string.IsNullOrEmpty(reply))
@@ -167,7 +165,7 @@ namespace PaymillWrapper.Net
             catch
             {
                 throw new PaymillException(
-                    String.Format("Unsupported or invalid character set encoding '{0}'.", charset));
+                    String.Format("Unsupported or invalid character set encoding '{0}'.", _charset));
             }
 
         }

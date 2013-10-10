@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Net.Http;
 using System.Threading.Tasks;
 using PaymillWrapper.Models;
 using PaymillWrapper.Net;
@@ -7,7 +8,7 @@ namespace PaymillWrapper.Service
 {
     public class SubscriptionService : AbstractService<Subscription>
     {
-        public SubscriptionService(HttpClientRest client, string apiUrl)
+        public SubscriptionService(HttpClient client, string apiUrl)
             : base(client, apiUrl)
         {
         }
@@ -42,27 +43,27 @@ namespace PaymillWrapper.Service
                 Resource.Subscriptions,
                 subscription,
                 null,
-                new URLEncoder().EncodeSubscriptionAdd(subscription));
+                new UrlEncoder().EncodeSubscriptionAdd(subscription));
         }
 
         /// <summary>
         /// To GetAsync the details of an existing subscription you’ll need to supply the subscription ID
         /// </summary>
-        /// <param name="subscriptionID">Subscription identifier</param>
+        /// <param name="subscriptionId">Subscription identifier</param>
         /// <returns>Subscription-object</returns>
-        public async Task<Subscription> GetSubscriptionAsync(string subscriptionID)
+        public async Task<Subscription> GetSubscriptionAsync(string subscriptionId)
         {
-            return await GetAsync(Resource.Subscriptions, subscriptionID);
+            return await GetAsync(Resource.Subscriptions, subscriptionId);
         }
 
         /// <summary>
         /// This function deletes a subscription
         /// </summary>
-        /// <param name="subscriptionID">Subscription identifier</param>
+        /// <param name="subscriptionId">Subscription identifier</param>
         /// <returns>Return true if remove was ok, false if not possible</returns>
-        public async Task<bool> RemoveSubscriptionAsync(string subscriptionID)
+        public async Task<bool> RemoveSubscriptionAsync(string subscriptionId)
         {
-            return await RemoveAsync(Resource.Subscriptions, subscriptionID);
+            return await RemoveAsync(Resource.Subscriptions, subscriptionId);
         }
 
         /// <summary>
@@ -76,7 +77,7 @@ namespace PaymillWrapper.Service
                 Resource.Subscriptions,
                 subscription,
                 subscription.Id,
-                new URLEncoder().EncodeSubscriptionUpdate(subscription));
+                new UrlEncoder().EncodeSubscriptionUpdate(subscription));
         }
     }
 }

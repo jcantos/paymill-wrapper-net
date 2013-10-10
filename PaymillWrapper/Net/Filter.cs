@@ -1,63 +1,61 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using System.Web;
 
 namespace PaymillWrapper.Net
 {
     public class Filter
     {
-        private Encoding charset;
-        private Dictionary<string, object> data;
+        private readonly Encoding _charset;
+        private readonly Dictionary<string, object> _data;
 
         public Filter()
         {
-            charset = Encoding.UTF8;
-            data = new Dictionary<string, object>();
+            _charset = Encoding.UTF8;
+            _data = new Dictionary<string, object>();
         }
 
         public void Add(string key, object value)
         {
-            data.Add(key, value);
+            _data.Add(key, value);
         }
 
         public override string ToString()
         {
-            StringBuilder sb = new StringBuilder();
-            foreach (KeyValuePair<string,object> pair in data)
+            var sb = new StringBuilder();
+            foreach (var pair in _data)
             {
-                object value = pair.Value;
+                var value = pair.Value;
                 if (value != null)
-                    this.addKeyValuePair(sb, pair.Key, value);
+                    AddKeyValuePair(sb, pair.Key, value);
             }
 
             return sb.ToString();
         }
 
-        private void addKeyValuePair(StringBuilder sb, string key, object value)
+        private void AddKeyValuePair(StringBuilder sb, string key, object value)
         {
-            string reply = "";
+            var reply = "";
 
             if (value == null) return;
 
             try
             {
 
-                key = HttpUtility.UrlEncode(key.ToLower(), this.charset);
+                key = HttpUtility.UrlEncode(key.ToLower(), _charset);
 
                 if (value.GetType().IsEnum)
                 {
                     reply = value.ToString().ToLower();
                 }
-                else if (value.GetType().Equals(typeof(DateTime)))
+                else if (value is DateTime)
                 {
                     if (value.Equals(DateTime.MinValue)) reply = "";
                 }
                 else
                 {
-                    reply = HttpUtility.UrlEncode(value.ToString(), this.charset);
+                    reply = HttpUtility.UrlEncode(value.ToString(), _charset);
                 }
 
                 if (!string.IsNullOrEmpty(reply))
@@ -72,7 +70,7 @@ namespace PaymillWrapper.Net
             catch
             {
                 throw new PaymillException(
-                    String.Format("Unsupported or invalid character set encoding '{0}'.", charset));
+                    String.Format("Unsupported or invalid character set encoding '{0}'.", _charset));
             }
 
         }

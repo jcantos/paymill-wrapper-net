@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Net.Http;
 using System.Threading.Tasks;
 using PaymillWrapper.Models;
 using PaymillWrapper.Net;
@@ -7,7 +8,7 @@ namespace PaymillWrapper.Service
 {
     public class RefundService : AbstractService<Refund>
     {
-        public RefundService(HttpClientRest client, string apiUrl)
+        public RefundService(HttpClient client, string apiUrl)
             : base(client, apiUrl)
         {
         }
@@ -42,17 +43,17 @@ namespace PaymillWrapper.Service
                 Resource.Refunds,
                 refund,
                 refund.Transaction.Id,
-                new URLEncoder().EncodeRefund(refund));
+                new UrlEncoder().EncodeRefund(refund));
         }
 
         /// <summary>
         /// To GetAsync the details of an object refund you’ll need to supply the refund ID
         /// </summary>
-        /// <param name="refundID">Refund identifier</param>
+        /// <param name="refundId">Refund identifier</param>
         /// <returns>Refund-object</returns>
-        public async Task<Refund> GetRefundAsync(string refundID)
+        public async Task<Refund> GetRefundAsync(string refundId)
         {
-            return await GetAsync(Resource.Refunds, refundID);
+            return await GetAsync(Resource.Refunds, refundId);
         }
     }
 }

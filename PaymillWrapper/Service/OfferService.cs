@@ -1,8 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
+using System.Net.Http;
 using System.Threading.Tasks;
-using System.Web;
 using PaymillWrapper.Models;
 using PaymillWrapper.Net;
 
@@ -10,7 +8,7 @@ namespace PaymillWrapper.Service
 {
     public class OfferService : AbstractService<Offer>
     {
-        public OfferService(HttpClientRest client, string apiUrl)
+        public OfferService(HttpClient client, string apiUrl)
             : base(client, apiUrl)
         {
         }
@@ -37,7 +35,7 @@ namespace PaymillWrapper.Service
         /// <summary>
         /// This function creates a offer object
         /// </summary>
-        /// <param name="client">Object-offer</param>
+        /// <param name="offer">Object-offer</param>
         /// <returns>New object-offer just add</returns>
         public async Task<Offer> AddOfferAsync(Offer offer)
         {
@@ -45,33 +43,33 @@ namespace PaymillWrapper.Service
                 Resource.Offers,
                 offer,
                 null,
-                new URLEncoder().EncodeOfferAdd(offer));
+                new UrlEncoder().EncodeOfferAdd(offer));
         }
 
         /// <summary>
         /// To GetAsync the details of an existing offer you’ll need to supply the offer ID
         /// </summary>
-        /// <param name="clientID">Offer identifier</param>
+        /// <param name="offerId">Offer identifier</param>
         /// <returns>Offer-object</returns>
-        public async Task<Offer> GetOfferAsync(string offerID)
+        public async Task<Offer> GetOfferAsync(string offerId)
         {
-            return await GetAsync(Resource.Offers, offerID);
+            return await GetAsync(Resource.Offers, offerId);
         }
 
         /// <summary>
         /// This function deletes a offer
         /// </summary>
-        /// <param name="clientID">Offer identifier</param>
+        /// <param name="offerId">Offer identifier</param>
         /// <returns>Return true if remove was ok, false if not possible</returns>
-        public async Task<bool> RemoveOfferAsync(string offerID)
+        public async Task<bool> RemoveOfferAsync(string offerId)
         {
-            return await RemoveAsync(Resource.Offers, offerID);
+            return await RemoveAsync(Resource.Offers, offerId);
         }
 
         /// <summary>
         /// This function updates the data of a offer
         /// </summary>
-        /// <param name="client">Object-offer</param>
+        /// <param name="offer">Object-offer</param>
         /// <returns>Object-offer just updated</returns>
         public async Task<Offer> UpdateOfferAsync(Offer offer)
         {
@@ -79,7 +77,7 @@ namespace PaymillWrapper.Service
                 Resource.Offers,
                 offer,
                 offer.Id,
-                new URLEncoder().EncodeOfferUpdate(offer));
+                new UrlEncoder().EncodeOfferUpdate(offer));
         }
     }
 }

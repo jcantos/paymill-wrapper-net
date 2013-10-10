@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
 using System.Runtime.Serialization;
-using System.Web;
 
 namespace PaymillWrapper.Models
 {
@@ -13,13 +10,13 @@ namespace PaymillWrapper.Models
     {
         public enum TypeStatus
         {
-            PARTIAL_REFUNDED, 
-            REFUNDED, 
-            CLOSED, 
-            FAILED, 
-            PENDING,
-            OPEN,
-            PREAUTH
+            PartialRefunded, 
+            Refunded, 
+            Closed, 
+            Failed, 
+            Pending,
+            Open,
+            Preauth
         }
 
         /// <summary>
@@ -44,17 +41,17 @@ namespace PaymillWrapper.Models
         /// The used amount, smallest possible unit per currency (for euro, we’re calculating the amount in cents)
         /// </summary>
         [DataMember(Name = "Origin_Amount")]
-        public double Origin_Amount { get; set; }
+        public double OriginAmount { get; set; }
 
         /// <summary>
         /// Formatted origin amount
         /// </summary>
         [IgnoreDataMember]
-        public double Origin_AmountFormatted
+        public double OriginAmountFormatted
         {
             get
             {
-                return Origin_Amount / 100;
+                return OriginAmount / 100;
             }
         }
 

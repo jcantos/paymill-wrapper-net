@@ -1,13 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
 using System.Net.Http;
-using System.Net.Http.Headers;
-using System.Text;
 using System.Threading.Tasks;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
-using PaymillWrapper;
 using PaymillWrapper.Models;
 using PaymillWrapper.Net;
 
@@ -15,7 +8,7 @@ namespace PaymillWrapper.Service
 {
     public class PaymentService : AbstractService<Payment>
     {
-        public PaymentService(HttpClientRest client, string apiUrl)
+        public PaymentService(HttpClient client, string apiUrl)
             : base(client, apiUrl)
         {
         }
@@ -42,7 +35,7 @@ namespace PaymillWrapper.Service
         /// <summary>
         /// This function creates a payment object
         /// </summary>
-        /// <param name="client">Object-payment</param>
+        /// <param name="creditCardPayment">Object-payment</param>
         /// <returns>New object-payment just add</returns>
         public async Task<Payment> AddPaymentAsync(Payment creditCardPayment)
         {
@@ -50,27 +43,27 @@ namespace PaymillWrapper.Service
                 Resource.Payments,
                 creditCardPayment,
                 null,
-                new URLEncoder().Encode<Payment>(creditCardPayment));
+                new UrlEncoder().Encode<Payment>(creditCardPayment));
         }
 
         /// <summary>
         /// To GetAsync the details of an existing payment you’ll need to supply the payment ID
         /// </summary>
-        /// <param name="clientID">Payment identifier</param>
+        /// <param name="paymentId">Payment identifier</param>
         /// <returns>Payment-object</returns>
-        public async Task<Payment> GetPaymentAsync(string paymentID)
+        public async Task<Payment> GetPaymentAsync(string paymentId)
         {
-            return await GetAsync(Resource.Payments, paymentID);
+            return await GetAsync(Resource.Payments, paymentId);
         }
 
         /// <summary>
         /// This function deletes a payment
         /// </summary>
-        /// <param name="clientID">Payment identifier</param>
+        /// <param name="paymentId">Payment identifier</param>
         /// <returns>Return true if remove was ok, false if not possible</returns>
-        public async Task<bool> RemovePaymentAsync(string paymentID)
+        public async Task<bool> RemovePaymentAsync(string paymentId)
         {
-            return await RemoveAsync(Resource.Payments, paymentID);
+            return await RemoveAsync(Resource.Payments, paymentId);
         }
 
     }

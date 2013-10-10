@@ -1,4 +1,4 @@
-﻿using PaymillWrapper.Net;
+﻿using System.Net.Http;
 using System;
 using System.Net.Http.Headers;
 using System.Text;
@@ -29,11 +29,11 @@ namespace PaymillWrapper
         private TransactionService _transactions;
         public string ApiKey { get; private set; }
         public string ApiUrl { get; private set; }
-        protected HttpClientRest Client
+        private HttpClient Client
         {
             get
             {
-                var client = new HttpClientRest(ApiUrl, ApiKey);
+                var client = new HttpClient();
                 client.DefaultRequestHeaders.Accept
                     .Add(new MediaTypeWithQualityHeaderValue("application/json"));
 

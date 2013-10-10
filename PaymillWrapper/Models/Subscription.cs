@@ -2,9 +2,7 @@
 using PaymillWrapper.Net;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Runtime.Serialization;
-using System.Web;
 
 namespace PaymillWrapper.Models
 {
@@ -31,7 +29,7 @@ namespace PaymillWrapper.Models
         /// Cancel this subscription immediately or at the end of the current period?
         /// </summary>
         [DataMember(Name = "Cancel_At_Period_End")]
-        public bool Cancel_At_Period_End { get; set; }
+        public bool CancelAtPeriodEnd { get; set; }
 
         /// <summary>
         /// Cancel date

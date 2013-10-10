@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.Serialization;
-using System.Web;
+﻿using System.Runtime.Serialization;
 
 namespace PaymillWrapper.Models
 {
@@ -14,9 +10,9 @@ namespace PaymillWrapper.Models
     {
         public enum TypeStatus
         {
-            OPEN, 
-            REFUNDED, 
-            FAILED
+            Open, 
+            Refunded, 
+            Failed
         }
 
         /// <summary>
@@ -39,7 +35,7 @@ namespace PaymillWrapper.Models
         {
             get
             {
-                return Amount / 100;
+                return Amount / 100f;
             }
         }
 

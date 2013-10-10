@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Net.Http;
 using System.Threading.Tasks;
 using PaymillWrapper.Models;
 using PaymillWrapper.Net;
@@ -7,7 +8,7 @@ namespace PaymillWrapper.Service
 {
     public class PreauthorizationService : AbstractService<Preauthorization>
     {
-        public PreauthorizationService(HttpClientRest client, string apiUrl)
+        public PreauthorizationService(HttpClient client, string apiUrl)
             : base(client, apiUrl)
         {
         }
@@ -44,7 +45,7 @@ namespace PaymillWrapper.Service
                 Resource.Preauthorizations,
                 preauthorization,
                 null,
-                new URLEncoder().EncodePreauthorization(preauthorization));
+                new UrlEncoder().EncodePreauthorization(preauthorization));
 
             if (replyTransaction != null)
                 reply = replyTransaction.Preauthorization;
@@ -55,11 +56,11 @@ namespace PaymillWrapper.Service
         /// <summary>
         /// To GetAsync the details of an existing preauthorization you’ll need to supply the transaction ID
         /// </summary>
-        /// <param name="preauthorizationID">Preauthorization identifier</param>
+        /// <param name="preauthorizationId">Preauthorization identifier</param>
         /// <returns>Preauthorization-object</returns>
-        public async Task<Preauthorization> GetPreauthorizationAsync(string preauthorizationID)
+        public async Task<Preauthorization> GetPreauthorizationAsync(string preauthorizationId)
         {
-            return await GetAsync(Resource.Preauthorizations, preauthorizationID);
+            return await GetAsync(Resource.Preauthorizations, preauthorizationId);
         }
     }
 }

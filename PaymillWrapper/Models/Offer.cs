@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.Serialization;
-using System.Text;
-using System.Web;
+﻿using System.Runtime.Serialization;
 
 namespace PaymillWrapper.Models
 {
@@ -15,9 +10,9 @@ namespace PaymillWrapper.Models
     {
         public enum TypeInterval
         {
-            WEEK,
-            MONTH,
-            YEAR
+            Week,
+            Month,
+            Year
         }
 
         /// <summary>
@@ -54,7 +49,7 @@ namespace PaymillWrapper.Models
         /// Give it a try or charge directly?
         /// </summary>
         [DataMember(Name = "Trial_Period_Days")]
-        public int Trial_Period_Days { get; set; }
+        public int TrialPeriodDays { get; set; }
 
         /// <summary>
         /// ISO 4217 formatted currency code

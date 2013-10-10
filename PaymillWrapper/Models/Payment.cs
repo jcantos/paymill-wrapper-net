@@ -1,10 +1,6 @@
 ﻿using Newtonsoft.Json;
 using PaymillWrapper.Net;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Runtime.Serialization;
-using System.Web;
 
 namespace PaymillWrapper.Models
 {
@@ -16,8 +12,8 @@ namespace PaymillWrapper.Models
     {
         public enum TypePayment
         {
-            CREDITCARD, 
-            DEBIT
+            CreditCard, 
+            Debit
         }
 
         /// <summary>
@@ -36,7 +32,7 @@ namespace PaymillWrapper.Models
         /// Visa or Mastercard
         /// </summary>
         [DataMember(Name = "Card_Type")]
-        public string Card_Type { get; set; }
+        public string CardType { get; set; }
 
         /// <summary>
         /// Country
@@ -48,19 +44,19 @@ namespace PaymillWrapper.Models
         /// Expiry month of the credit card
         /// </summary>
         [DataMember(Name = "Expire_Month")]
-        public int Expire_Month { get; set; }
+        public int ExpireMonth { get; set; }
 
         /// <summary>
         /// Expiry year of the credit card
         /// </summary>
         [DataMember(Name = "Expire_Year")]
-        public int Expire_Year { get; set; }
+        public int ExpireYear { get; set; }
 
         /// <summary>
         /// Name of the card holder
         /// </summary>
         [DataMember(Name = "Card_Holder")]
-        public string Card_Holder { get; set; }
+        public string CardHolder { get; set; }
 
         /// <summary>
         /// The last four digits of the credit card

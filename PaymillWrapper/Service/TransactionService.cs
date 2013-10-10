@@ -1,8 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
+using System.Net.Http;
 using System.Threading.Tasks;
-using System.Web;
 using PaymillWrapper.Models;
 using PaymillWrapper.Net;
 
@@ -10,7 +8,7 @@ namespace PaymillWrapper.Service
 {
     public class TransactionService : AbstractService<Transaction>
     {
-        public TransactionService(HttpClientRest client, string apiUrl)
+        public TransactionService(HttpClient client, string apiUrl)
             : base(client, apiUrl)
         {
         }
@@ -37,7 +35,7 @@ namespace PaymillWrapper.Service
         /// <summary>
         /// This function creates a transaction object
         /// </summary>
-        /// <param name="client">Object-transaction</param>
+        /// <param name="transaction">Object-transaction</param>
         /// <returns>New object-transaction just add</returns>
         public async Task<Transaction> AddTransactionAsync(Transaction transaction)
         {
@@ -45,17 +43,17 @@ namespace PaymillWrapper.Service
                 Resource.Transactions,
                 transaction,
                 null,
-                new URLEncoder().EncodeTransaction(transaction));
+                new UrlEncoder().EncodeTransaction(transaction));
         }
 
         /// <summary>
         /// To GetAsync the details of an existing transaction you’ll need to supply the transaction ID
         /// </summary>
-        /// <param name="clientID">Client identifier</param>
+        /// <param name="transactionId">Client identifier</param>
         /// <returns>Client-object</returns>
-        public async Task<Transaction> GetTransactionAsync(string transactionID)
+        public async Task<Transaction> GetTransactionAsync(string transactionId)
         {
-            return await GetAsync(Resource.Transactions, transactionID);
+            return await GetAsync(Resource.Transactions, transactionId);
         }
     }
 }
