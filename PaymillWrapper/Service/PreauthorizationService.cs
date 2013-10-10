@@ -7,8 +7,8 @@ namespace PaymillWrapper.Service
 {
     public class PreauthorizationService : AbstractService<Preauthorization>
     {
-        public PreauthorizationService(HttpClientRest client)
-            : base(client)
+        public PreauthorizationService(HttpClientRest client, string apiUrl)
+            : base(client, apiUrl)
         {
         }
 

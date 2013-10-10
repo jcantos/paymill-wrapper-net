@@ -7,7 +7,8 @@ namespace PaymillWrapper.Service
 {
     public class RefundService : AbstractService<Refund>
     {
-        public RefundService(HttpClientRest client):base(client)
+        public RefundService(HttpClientRest client, string apiUrl)
+            : base(client, apiUrl)
         {
         }
 

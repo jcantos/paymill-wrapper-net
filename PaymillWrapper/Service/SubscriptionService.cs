@@ -7,7 +7,8 @@ namespace PaymillWrapper.Service
 {
     public class SubscriptionService : AbstractService<Subscription>
     {
-        public SubscriptionService(HttpClientRest client):base(client)
+        public SubscriptionService(HttpClientRest client, string apiUrl)
+            : base(client, apiUrl)
         {
         }
 

@@ -9,9 +9,10 @@ using System.Net.Http.Headers;
 
 namespace PaymillWrapper.Service
 {
-    public class AbstractService<T>
+    public abstract class AbstractService<T>
     {
-        protected HttpClientRest Client;
+        protected readonly HttpClientRest Client;
+        private readonly string _apiUrl;
 
         public enum Resource
         {
@@ -24,14 +25,15 @@ namespace PaymillWrapper.Service
             Preauthorizations
         }
 
-        public AbstractService(HttpClientRest client)
+        protected AbstractService(HttpClientRest client, string apiUrl)
         {
             Client = client;
+            _apiUrl = apiUrl;
         }
 
         protected async Task<List<T>> GetListAsync(Resource resource, Filter filter)
         {
-            string requestUri = Paymill.ApiUrl + "/" + resource.ToString().ToLower();
+            string requestUri = _apiUrl + "/" + resource.ToString().ToLower();
 
             if (filter != null)
                 requestUri += String.Format("?{0}",filter.ToString());
@@ -52,7 +54,7 @@ namespace PaymillWrapper.Service
             var content = new StringContent(encodeParams);
             content.Headers.ContentType = new MediaTypeHeaderValue("application/x-www-form-urlencoded");
 
-            var requestUri = Paymill.ApiUrl + "/" + resource.ToString().ToLower();
+            var requestUri = _apiUrl + "/" + resource.ToString().ToLower();
 
             if (!string.IsNullOrEmpty(resourceID))
                 requestUri += "/" + resourceID;
@@ -71,7 +73,7 @@ namespace PaymillWrapper.Service
 
         protected async Task<T> GetAsync(Resource resource, string resourceID)
         {
-            var requestUri = Paymill.ApiUrl + "/" + resource.ToString().ToLower() + "/" + resourceID;
+            var requestUri = _apiUrl + "/" + resource.ToString().ToLower() + "/" + resourceID;
             var response = await Client.GetAsync(requestUri);
             response.EnsureSuccessStatusCode();
             var jsonArray = await response.Content.ReadAsAsync<JObject>();
@@ -80,7 +82,7 @@ namespace PaymillWrapper.Service
 
         protected async Task<bool> RemoveAsync(Resource resource, string resourceID)
         {
-            var requestUri = Paymill.ApiUrl + "/" + resource.ToString().ToLower() + "/" + resourceID;
+            var requestUri = _apiUrl + "/" + resource.ToString().ToLower() + "/" + resourceID;
             var response = await Client.DeleteAsync(requestUri);
             response.EnsureSuccessStatusCode();
             var jsonArray = await response.Content.ReadAsAsync<JObject>();
@@ -93,7 +95,7 @@ namespace PaymillWrapper.Service
             var content = new StringContent(encodeParams);
             content.Headers.ContentType = new MediaTypeHeaderValue("application/x-www-form-urlencoded");
 
-            var requestUri = Paymill.ApiUrl + "/" + resource.ToString().ToLower() + "/" + resourceID;
+            var requestUri = _apiUrl + "/" + resource.ToString().ToLower() + "/" + resourceID;
             var response = await Client.PutAsync(requestUri, content);
             response.EnsureSuccessStatusCode();
             var jsonArray = await response.Content.ReadAsAsync<JObject>();

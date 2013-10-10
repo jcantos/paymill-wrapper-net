@@ -10,7 +10,8 @@ namespace PaymillWrapper.Service
 {
     public class OfferService : AbstractService<Offer>
     {
-        public OfferService(HttpClientRest client):base(client)
+        public OfferService(HttpClientRest client, string apiUrl)
+            : base(client, apiUrl)
         {
         }
 

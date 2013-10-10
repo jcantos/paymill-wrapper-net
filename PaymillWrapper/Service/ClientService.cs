@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
-using System.Web;
 using PaymillWrapper.Models;
 using PaymillWrapper.Net;
 
@@ -10,7 +7,8 @@ namespace PaymillWrapper.Service
 {
     public class ClientService : AbstractService<Client>
     {
-        public ClientService(HttpClientRest client):base(client)
+        public ClientService(HttpClientRest client, string apiUrl)
+            : base(client, apiUrl)
         {
         }
         

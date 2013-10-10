@@ -10,7 +10,8 @@ namespace PaymillWrapper.Service
 {
     public class TransactionService : AbstractService<Transaction>
     {
-        public TransactionService(HttpClientRest client):base(client)
+        public TransactionService(HttpClientRest client, string apiUrl)
+            : base(client, apiUrl)
         {
         }
 

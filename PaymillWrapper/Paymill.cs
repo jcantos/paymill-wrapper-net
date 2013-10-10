@@ -1,54 +1,83 @@
-﻿using Newtonsoft.Json.Linq;
-using PaymillWrapper.Models;
-using PaymillWrapper.Net;
+﻿using PaymillWrapper.Net;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
-using System.Web;
 using PaymillWrapper.Service;
 
 namespace PaymillWrapper
 {
-    public static class Paymill
+    public class Paymill
     {
-        public static string ApiKey { get; set; }
-        public static string ApiUrl { get; set; }
-        public static HttpClientRest Client
+        public Paymill(string apiKey, string apiUrl = "https://api.paymill.com/v2/")
+        {
+            ApiKey = apiKey;
+            ApiUrl = apiUrl;
+
+            if (string.IsNullOrEmpty(ApiKey))
+                throw new ArgumentException("You need to set an API key", "apiKey");
+
+            if (string.IsNullOrEmpty(ApiUrl))
+                throw new ArgumentException("You need to set an API URL.", "apiUrl");
+        }
+
+        private ClientService _clients;
+        private OfferService _offers;
+        private PaymentService _payments;
+        private PreauthorizationService _preauthorizations;
+        private RefundService _refunds;
+        private SubscriptionService _subscriptions;
+        private TransactionService _transactions;
+        public string ApiKey { get; private set; }
+        public string ApiUrl { get; private set; }
+        protected HttpClientRest Client
         {
             get
             {
-                if (string.IsNullOrEmpty(ApiKey))
-                    throw new PaymillException("You need to set an api key before instantiating an HttpClientRest");
-
-                if (string.IsNullOrEmpty(ApiUrl))
-                    throw new PaymillException("You need to set an api url before instantiating an HttpClientRest");
-
                 var client = new HttpClientRest(ApiUrl, ApiKey);
                 client.DefaultRequestHeaders.Accept
                     .Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
-                string authInfo = ApiKey + ":";
+                var authInfo = ApiKey + ":";
                 authInfo = Convert.ToBase64String(Encoding.Default.GetBytes(authInfo));
-                client.DefaultRequestHeaders.Authorization = 
-                    new System.Net.Http.Headers.AuthenticationHeaderValue("Basic", authInfo);  
+                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", authInfo);  
 
                 return client;
             }
         }
 
-        /// <summary>
-        /// Allows get access to the data provider
-        /// </summary>
-        /// <typeparam name="AbstractService">Type of service</typeparam>
-        /// <returns>New object-service</returns>
-        public static AbstractService GetService<AbstractService>()
+        public ClientService Clients
         {
-            AbstractService reply = (AbstractService)Activator.CreateInstance(typeof(AbstractService),Client);
+            get { return _clients = _clients ?? new ClientService(Client, ApiUrl); }
+        }
 
-            return reply;
+        public OfferService Offers
+        {
+            get { return _offers = _offers ?? new OfferService(Client, ApiUrl); }
+        }
+
+        public PaymentService Payments
+        {
+            get { return _payments = _payments ?? new PaymentService(Client, ApiUrl); }
+        }
+
+        public PreauthorizationService Preauthorizations
+        {
+            get { return _preauthorizations = _preauthorizations ?? new PreauthorizationService(Client, ApiUrl); }
+        }
+
+        public RefundService Refunds
+        {
+            get { return _refunds = _refunds ?? new RefundService(Client, ApiUrl); }
+        }
+
+        public SubscriptionService Subscriptions
+        {
+            get { return _subscriptions = _subscriptions ?? new SubscriptionService(Client, ApiUrl); }
+        }
+
+        public TransactionService Transactions
+        {
+            get { return _transactions = _transactions ?? new TransactionService(Client, ApiUrl); }
         }
     }
 }

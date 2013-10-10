@@ -15,8 +15,8 @@ namespace PaymillWrapper.Service
 {
     public class PaymentService : AbstractService<Payment>
     {
-        public PaymentService(HttpClientRest client)
-            : base(client)
+        public PaymentService(HttpClientRest client, string apiUrl)
+            : base(client, apiUrl)
         {
         }
 
