@@ -4,9 +4,9 @@ using PaymillWrapper.Models;
 using System;
 using System.Reflection;
 
-namespace PaymillWrapper.Net
+namespace PaymillWrapper.Internal
 {
-    public class JsonParser<T> : JsonConverter
+    class StringToBaseModelConverter<T> : JsonConverter
     {
         public override bool CanConvert(Type objectType)
         {

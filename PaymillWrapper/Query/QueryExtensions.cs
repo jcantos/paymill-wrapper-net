@@ -3,6 +3,7 @@ using System.Globalization;
 using System.Linq.Expressions;
 using System.Reflection;
 using System.Runtime.Serialization;
+using PaymillWrapper.Internal;
 using PaymillWrapper.Models;
 
 namespace PaymillWrapper.Query

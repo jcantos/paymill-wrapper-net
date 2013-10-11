@@ -8,13 +8,6 @@ namespace PaymillWrapper.Models
     /// </summary>
     public class Offer : BaseModel, IQueryableAmount
     {
-        public enum TypeInterval
-        {
-            Week,
-            Month,
-            Year
-        }
-
         /// <summary>
         /// Your name for this offer
         /// </summary>
@@ -42,8 +35,9 @@ namespace PaymillWrapper.Models
         /// <summary>
         /// Defining how often the client should be charged (week, month, year)
         /// </summary>
+        // TODO: fix this to use some sort of statically typed representation (TimeSpan?)
         [DataMember(Name = "interval")]
-        public TypeInterval Interval { get; set; }
+        public string Interval { get; set; }
 
         /// <summary>
         /// Give it a try or charge directly?
@@ -57,5 +51,16 @@ namespace PaymillWrapper.Models
         [DataMember(Name = "currency")]
         public string Currency { get; set; }
 
+        [DataMember(Name = "subscription_count")]
+        public SubscriptionCount SubscriptionCount { get; set; }
+    }
+
+    [DataContract]
+    public class SubscriptionCount
+    {
+        [DataMember(Name = "active")]
+        public int Active { get; set; }
+        [DataMember(Name = "inactive")]
+        public int Inactive { get; set; }
     }
 }

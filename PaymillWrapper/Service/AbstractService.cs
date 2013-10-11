@@ -2,9 +2,10 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
+using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
+using PaymillWrapper.Internal;
 using PaymillWrapper.Models;
-using PaymillWrapper.Net;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System.Net.Http;
@@ -46,8 +47,9 @@ namespace PaymillWrapper.Service
             Trace.WriteLine(requestUri);
             Trace.Write(await response.Content.ReadAsStringAsync());
 #endif
-            var jsonArray = await response.Content.ReadAsAsync<JObject>();
-            return JsonConvert.DeserializeObject<ReadOnlyCollection<T>>(jsonArray["data"].ToString());
+            var json = await response.Content.ReadAsStringAsync();
+            var results = JsonConvert.DeserializeObject<MultipleResults<T>>(json, new UnixTimestampConverter());
+            return results.Data;
         }
 
         public virtual async Task<IReadOnlyCollection<T>> GetAsync()
@@ -78,8 +80,9 @@ namespace PaymillWrapper.Service
             var response = await Client.PostAsync(requestUri, content);
             response.EnsureSuccessStatusCode();
 
-            var jsonArray = await response.Content.ReadAsAsync<JObject>();
-            return JsonConvert.DeserializeObject<TResult>(jsonArray["data"].ToString());
+            var json = await response.Content.ReadAsStringAsync();
+            var result = JsonConvert.DeserializeObject<SingleResult<TResult>>(json, new UnixTimestampConverter());
+            return result.Data;
         }
 
         /// <summary>
@@ -95,8 +98,9 @@ namespace PaymillWrapper.Service
             var requestUri = _apiUrl + "/" + _resource.ToString().ToLower() + "/" + resourceId;
             var response = await Client.GetAsync(requestUri);
             response.EnsureSuccessStatusCode();
-            var jsonArray = await response.Content.ReadAsAsync<JObject>();
-            return JsonConvert.DeserializeObject<T>(jsonArray["data"].ToString());
+            var json = await response.Content.ReadAsStringAsync();
+            var result = JsonConvert.DeserializeObject<SingleResult<T>>(json, new UnixTimestampConverter());
+            return result.Data;
         }
 
         public virtual async Task<bool> RemoveAsync(string resourceId)
@@ -117,8 +121,9 @@ namespace PaymillWrapper.Service
             var requestUri = _apiUrl + "/" + _resource.ToString().ToLower() + "/" + GetResourceId(obj);
             var response = await Client.PutAsync(requestUri, content);
             response.EnsureSuccessStatusCode();
-            var jsonArray = await response.Content.ReadAsAsync<JObject>();
-            return JsonConvert.DeserializeObject<T>(jsonArray["data"].ToString());
+            var json = await response.Content.ReadAsStringAsync();
+            var result = JsonConvert.DeserializeObject<SingleResult<T>>(json, new UnixTimestampConverter());
+            return result.Data;
         }
     }
 }

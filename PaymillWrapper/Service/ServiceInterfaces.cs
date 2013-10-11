@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using PaymillWrapper.Models;
-using PaymillWrapper.Net;
 using PaymillWrapper.Query;
 
 namespace PaymillWrapper.Service

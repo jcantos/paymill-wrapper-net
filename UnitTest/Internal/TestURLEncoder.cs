@@ -1,8 +1,8 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using PaymillWrapper.Net;
+using PaymillWrapper.Internal;
 using PaymillWrapper.Models;
 
-namespace UnitTest.Net
+namespace UnitTest.Internal
 {
     [TestClass]
     public class TestUrlEncoder
@@ -99,12 +99,12 @@ namespace UnitTest.Net
             {
                 Amount = 1500,
                 Currency = "eur",
-                Interval = Offer.TypeInterval.Month,
+                Interval = "1 MONTH",
                 Name = "Prueba API",
                 TrialPeriodDays = 3
             };
 
-            const string expected = "amount=1500&currency=eur&interval=month&name=Prueba+API";
+            const string expected = "amount=1500&currency=eur&interval=1+MONTH&name=Prueba+API";
             var reply = urlEncoder.EncodeOfferAdd(offer);
 
             Assert.AreEqual(expected, reply);
@@ -118,10 +118,11 @@ namespace UnitTest.Net
             var offer = new Offer
             {
                 Name = "Oferta 48", 
-                Id = "offer_6eea405f83d4d3098604"
+                Id = "offer_6eea405f83d4d3098604",
+                Interval = "1 WEEK"
             };
 
-            const string expected = "amount=0&interval=week&name=Oferta+48";
+            const string expected = "amount=0&interval=1+WEEK&name=Oferta+48";
             var reply = urlEncoder.EncodeOfferAdd(offer);
 
             Assert.AreEqual(expected, reply);

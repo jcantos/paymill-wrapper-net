@@ -55,6 +55,8 @@ namespace PaymillWrapper.Models
         [DataMember(Name = "token")]
         public string Token { get; set; }
 
+        [DataMember(Name = "status")]
+        public PreauthorizationStatus Status { get; set; }
     }
 
     public enum PreauthorizationStatus

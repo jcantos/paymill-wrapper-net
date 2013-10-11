@@ -1,8 +1,7 @@
-﻿using Newtonsoft.Json;
-using PaymillWrapper.Net;
-using System;
-using System.Collections.Generic;
+﻿using System;
 using System.Runtime.Serialization;
+using Newtonsoft.Json;
+using PaymillWrapper.Internal;
 
 namespace PaymillWrapper.Models
 {
@@ -10,7 +9,7 @@ namespace PaymillWrapper.Models
     /// Subscriptions allow you to charge recurring payments on a client’s credit card / to a client’s direct debit. 
     /// A subscription connects a client to the offers-object.
     /// </summary>
-    [JsonConverter(typeof(JsonParser<Subscription>))]
+    [JsonConverter(typeof(StringToBaseModelConverter<Subscription>))]
     public class Subscription : BaseModel, IQueryableOffer
     {
         /// <summary>
@@ -31,11 +30,23 @@ namespace PaymillWrapper.Models
         [DataMember(Name = "cancel_at_period_end")]
         public bool CancelAtPeriodEnd { get; set; }
 
+        [DataMember(Name = "trial_start")]
+        public DateTime? TrialStart { get; set; }
+
+        [DataMember(Name = "trial_end")]
+        public DateTime? TrialEnd { get; set; }
+
+        /// <summary>
+        /// Next charge date.
+        /// </summary>
+        [DataMember(Name = "next_capture_at")]
+        public DateTime NextCaptureAt { get; set; }
+
         /// <summary>
         /// Cancel date
         /// </summary>
         [DataMember(Name = "canceled_at")]
-        public DateTime CanceledAt { get; set; }
+        public DateTime? CanceledAt { get; set; }
 
         /// <summary>
         /// Client-object

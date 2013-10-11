@@ -450,7 +450,7 @@ namespace SandboxConsole
             {
                 Amount = 1500,
                 Currency = "eur",
-                Interval = Offer.TypeInterval.Month,
+                Interval = "1 MONTH",
                 Name = "Prueba API",
                 TrialPeriodDays = 3
             };

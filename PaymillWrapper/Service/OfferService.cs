@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading.Tasks;
+using PaymillWrapper.Internal;
 using PaymillWrapper.Models;
-using PaymillWrapper.Net;
 
 namespace PaymillWrapper.Service
 {

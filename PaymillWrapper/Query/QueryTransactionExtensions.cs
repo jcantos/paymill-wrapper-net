@@ -1,4 +1,5 @@
-﻿using PaymillWrapper.Models;
+﻿using PaymillWrapper.Internal;
+using PaymillWrapper.Models;
 
 namespace PaymillWrapper.Query
 {

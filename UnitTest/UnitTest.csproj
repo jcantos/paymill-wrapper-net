@@ -39,6 +39,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Newtonsoft.Json, Version=4.5.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.5.0.6\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Net.Http.Formatting, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
@@ -57,9 +60,10 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
-    <Compile Include="Net\TestQuery.cs" />
+    <Compile Include="Models\TestJsonDeserialization.cs" />
+    <Compile Include="Query\TestQuery.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Net\TestURLEncoder.cs" />
+    <Compile Include="Internal\TestURLEncoder.cs" />
     <Compile Include="TestEnumExtensions.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -67,6 +71,16 @@
       <Project>{56d3c8fb-ed6e-4d9a-9472-704ff19a1ba5}</Project>
       <Name>PaymillWrapper</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Models\Input\client.json" />
+    <EmbeddedResource Include="Models\Input\offer.json" />
+    <EmbeddedResource Include="Models\Input\payment.json" />
+    <EmbeddedResource Include="Models\Input\refund.json" />
+    <EmbeddedResource Include="Models\Input\subscription.json" />
+    <EmbeddedResource Include="Models\Input\transaction.json" />
+    <EmbeddedResource Include="Models\Input\preauthorizations.json" />
+    <None Include="packages.config" />
   </ItemGroup>
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">

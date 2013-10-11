@@ -2,7 +2,7 @@
 using System.Linq.Expressions;
 using System.Reflection;
 
-namespace PaymillWrapper
+namespace PaymillWrapper.Internal
 {
     /// <summary>
     /// Mercilessly adapted from AutoMapper sources.

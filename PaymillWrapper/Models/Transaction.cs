@@ -103,6 +103,12 @@ namespace PaymillWrapper.Models
         /// </summary>
         [DataMember(Name = "response_code")]
         public ResponseCode ResponseCode { get; set; }
+
+        [DataMember(Name = "is_fraud")]
+        public bool IsFraud { get; set; }
+
+        [DataMember(Name = "short_id")]
+        public string ShortId { get; set; }
     }
 
     public enum TransactionStatus

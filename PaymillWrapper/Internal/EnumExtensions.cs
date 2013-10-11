@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Text.RegularExpressions;
 
-namespace PaymillWrapper
+namespace PaymillWrapper.Internal
 {
-    public static class EnumExtensions
+    internal static class EnumExtensions
     {
         public static string ToSnakeCase(this Enum val)
         {

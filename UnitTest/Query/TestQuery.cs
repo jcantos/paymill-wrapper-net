@@ -2,7 +2,7 @@
 using PaymillWrapper.Models;
 using PaymillWrapper.Query;
 
-namespace UnitTest.Net
+namespace UnitTest.Query
 {
     [TestClass]
     public class TestQuery

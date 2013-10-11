@@ -1,5 +1,5 @@
 ﻿using Newtonsoft.Json;
-using PaymillWrapper.Net;
+using PaymillWrapper.Internal;
 using System.Runtime.Serialization;
 
 namespace PaymillWrapper.Models
@@ -7,7 +7,7 @@ namespace PaymillWrapper.Models
     /// <summary>
     /// The Payment object represents a payment with a credit card or via direct debit.
     /// </summary>
-    [JsonConverter(typeof(JsonParser<Payment>))]
+    [JsonConverter(typeof(StringToBaseModelConverter<Payment>))]
     public class Payment : BaseModel
     {
         public enum TypePayment
@@ -32,7 +32,7 @@ namespace PaymillWrapper.Models
         /// Visa or Mastercard
         /// </summary>
         [DataMember(Name = "card_type")]
-        public string CardType { get; set; }
+        public CardType CardType { get; set; }
 
         /// <summary>
         /// Country

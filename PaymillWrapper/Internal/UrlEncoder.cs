@@ -3,9 +3,9 @@ using System;
 using System.Text;
 using System.Web;
 
-namespace PaymillWrapper.Net
+namespace PaymillWrapper.Internal
 {
-    public class UrlEncoder
+    class UrlEncoder
     {
         private readonly Encoding _charset;
 
