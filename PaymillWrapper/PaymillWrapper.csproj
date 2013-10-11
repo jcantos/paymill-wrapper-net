@@ -80,9 +80,11 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="QueryableInterfaces.cs" />
     <Compile Include="Internal\ReflectionHelper.cs" />
+    <Compile Include="Service\IResultCollection.cs" />
     <Compile Include="Service\Resource.cs" />
     <Compile Include="Service\AbstractService.cs" />
     <Compile Include="Service\ClientService.cs" />
+    <Compile Include="Service\ResultCollection.cs" />
     <Compile Include="Service\ServiceInterfaces.cs" />
     <Compile Include="Service\PreauthorizationService.cs" />
     <Compile Include="Service\SubscriptionService.cs" />

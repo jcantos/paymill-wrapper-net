@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Web;
@@ -22,9 +23,30 @@ namespace PaymillWrapper.Query
             _data = new Dictionary<string, object>();
         }
 
+        internal int PerPage
+        {
+            get
+            {
+                return !_data.ContainsKey("count") ? 20 : Convert.ToInt32(_data["count"]);
+            }
+        }
+
         internal void Add(string key, object value)
         {
             _data[key] = value;
+        }
+
+        internal void Inc(string key, int value)
+        {
+            var val = !_data.ContainsKey(key) ? 0 : (int) _data[key];
+            val += value;
+            Add(key, val);
+        }
+
+        internal int Offset
+        {
+            get { return !_data.ContainsKey("offset") ? 0 : (int) _data["offset"]; }
+            set { _data["offset"] = value; }
         }
 
         public override string ToString()
@@ -40,7 +62,7 @@ namespace PaymillWrapper.Query
             return sb.ToString();
         }
 
-        public async Task<IReadOnlyCollection<T>> GetAsync()
+        public async Task<IResultCollection<T>> GetAsync()
         {
             return await _service.GetAsync(this);
         }

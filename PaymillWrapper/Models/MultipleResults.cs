@@ -17,7 +17,7 @@ namespace PaymillWrapper.Models
     internal class MultipleResults<T>
     {
         [DataMember(Name = "data")]
-        public IReadOnlyCollection<T> Data { get; set; }
+        public IList<T> Data { get; set; }
 
         [DataMember(Name = "mode")]
         public string Mode { get; set; }

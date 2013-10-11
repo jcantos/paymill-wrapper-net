@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Diagnostics;
-using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using PaymillWrapper.Internal;
 using PaymillWrapper.Models;
@@ -34,7 +32,7 @@ namespace PaymillWrapper.Service
         protected abstract string GetEncodedCreateParams(T obj, UrlEncoder encoder);
         protected abstract string GetEncodedUpdateParams(T obj, UrlEncoder encoder);
 
-        internal async Task<IReadOnlyCollection<T>> GetAsync(Query<T> query)
+        internal async Task<IResultCollection<T>> GetAsync(Query<T> query)
         {
             var requestUri = _apiUrl + "/" + _resource.ToString().ToLower();
 
@@ -49,7 +47,7 @@ namespace PaymillWrapper.Service
 #endif
             var json = await response.Content.ReadAsStringAsync();
             var results = JsonConvert.DeserializeObject<MultipleResults<T>>(json, new UnixTimestampConverter());
-            return results.Data;
+            return new ResultCollection<T>(results.Data, query, results.Count);
         }
 
         public virtual async Task<IReadOnlyCollection<T>> GetAsync()
