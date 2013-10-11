@@ -6,19 +6,8 @@ namespace PaymillWrapper.Models
     /// <summary>
     /// A transaction is the charging of a credit card or a direct debit.
     /// </summary>
-    public class Transaction : BaseModel
+    public class Transaction : BaseModel, IQueryableAmount, IQueryableClient, IQueryablePayment
     {
-        public enum TypeStatus
-        {
-            PartialRefunded, 
-            Refunded, 
-            Closed, 
-            Failed, 
-            Pending,
-            Open,
-            Preauth
-        }
-
         /// <summary>
         /// Amount of this transaction
         /// </summary>
@@ -59,7 +48,7 @@ namespace PaymillWrapper.Models
         /// Indicates the current status of this transaction, e.g closed means the transaction is sucessfully transfered, refunded means that the amount is fully or in parts refunded
         /// </summary>
         [DataMember(Name = "Status")]
-        public TypeStatus Status { get; set; }
+        public TransactionStatus Status { get; set; }
 
         /// <summary>
         /// Need a additional description for this transaction? Maybe your shopping cart ID or something like that?
@@ -114,5 +103,16 @@ namespace PaymillWrapper.Models
         /// </summary>
         [DataMember(Name = "response_code")]
         public ResponseCode ResponseCode { get; set; }
+    }
+
+    public enum TransactionStatus
+    {
+        PartialRefunded, 
+        Refunded, 
+        Closed, 
+        Failed, 
+        Pending,
+        Open,
+        Preauthorize
     }
 }

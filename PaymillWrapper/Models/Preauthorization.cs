@@ -5,18 +5,8 @@ namespace PaymillWrapper.Models
     /// <summary>
     /// A transaction is the charging of a credit card or a direct debit.
     /// </summary>
-    public class Preauthorization : BaseModel
+    public class Preauthorization : BaseModel, IQueryableAmount, IQueryableClient, IQueryablePayment
     {
-        public enum TypeStatus
-        {
-            Open,
-            Pending,
-            Closed,
-            Failed, 
-            Delete,
-            Preauth
-        }
-
         /// <summary>
         /// Amount of this transaction
         /// </summary>
@@ -65,5 +55,15 @@ namespace PaymillWrapper.Models
         [DataMember(Name = "Token")]
         public string Token { get; set; }
 
+    }
+
+    public enum PreauthorizationStatus
+    {
+        Open,
+        Pending,
+        Closed,
+        Failed, 
+        Deleted,
+        Preauth
     }
 }

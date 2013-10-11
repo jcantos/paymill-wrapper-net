@@ -1,10 +1,11 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using PaymillWrapper.Net;
+using PaymillWrapper.Models;
+using PaymillWrapper.Query;
 
 namespace UnitTest.Net
 {
     [TestClass]
-    public class TestFilter
+    public class TestQuery
     {
         /// <summary>
         /// Gets or sets the test context which provides information and functionality for 
@@ -15,7 +16,7 @@ namespace UnitTest.Net
         [TestMethod]
         public void EncodeFilter()
         {
-            var filter = new Filter();
+            var filter = new Query<Payment>(null);
             filter.Add("count", 1);
             filter.Add("offset", 2);
             filter.Add("interval", "month");
@@ -27,6 +28,18 @@ namespace UnitTest.Net
             var reply = filter.ToString();
 
             Assert.AreEqual(expected, reply);
+        }
+
+        [TestMethod]
+        public void SubsequentCallsOverwritesValue()
+        {
+            var filter = new Query<Payment>(null);
+            filter.Add("count", 1);
+            Assert.AreEqual("count=1", filter.ToString());
+            filter.Add("count", 2);
+            Assert.AreEqual("count=2", filter.ToString());
+            filter.Take(3);
+            Assert.AreEqual("count=3", filter.ToString());
         }
 
     }

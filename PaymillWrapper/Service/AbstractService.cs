@@ -1,16 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Threading.Tasks;
+using PaymillWrapper.Models;
 using PaymillWrapper.Net;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
+using PaymillWrapper.Query;
 
 namespace PaymillWrapper.Service
 {
-    abstract class AbstractService<T> : ICRUDService<T>
+    abstract class AbstractService<T> : ICRUDService<T> 
+        where T : BaseModel
     {
         private readonly Resource _resource;
         protected readonly HttpClient Client;
@@ -29,17 +33,31 @@ namespace PaymillWrapper.Service
         protected abstract string GetEncodedCreateParams(T obj, UrlEncoder encoder);
         protected abstract string GetEncodedUpdateParams(T obj, UrlEncoder encoder);
 
-        public virtual async Task<IReadOnlyCollection<T>> GetAsync(Filter filter = null)
+        internal async Task<IReadOnlyCollection<T>> GetAsync(Query<T> query)
         {
             var requestUri = _apiUrl + "/" + _resource.ToString().ToLower();
 
-            if (filter != null)
-                requestUri += String.Format("?{0}", filter);
+            if (query != null)
+                requestUri += String.Format("?{0}", query);
 
             var response = await Client.GetAsync(requestUri);
             response.EnsureSuccessStatusCode();
+#if DEBUG
+            Trace.WriteLine(requestUri);
+            Trace.Write(await response.Content.ReadAsStringAsync());
+#endif
             var jsonArray = await response.Content.ReadAsAsync<JObject>();
             return JsonConvert.DeserializeObject<ReadOnlyCollection<T>>(jsonArray["data"].ToString());
+        }
+
+        public virtual async Task<IReadOnlyCollection<T>> GetAsync()
+        {
+            return await GetAsync(query: null);
+        }
+
+        public Query<T> Query
+        {
+            get { return new Query<T>(this); }
         }
 
         /// <summary>

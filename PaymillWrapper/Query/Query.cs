@@ -1,24 +1,30 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 using System.Web;
+using PaymillWrapper.Models;
+using PaymillWrapper.Service;
 
-namespace PaymillWrapper.Net
+namespace PaymillWrapper.Query
 {
-    public class Filter
+    public class Query<T>
+        where T: BaseModel
     {
+        private readonly AbstractService<T> _service;
         private readonly Encoding _charset;
         private readonly Dictionary<string, object> _data;
 
-        public Filter()
+        internal Query(AbstractService<T> service)
         {
+            _service = service;
             _charset = Encoding.UTF8;
             _data = new Dictionary<string, object>();
         }
 
-        public void Add(string key, object value)
+        internal void Add(string key, object value)
         {
-            _data.Add(key, value);
+            _data[key] = value;
         }
 
         public override string ToString()
@@ -32,6 +38,11 @@ namespace PaymillWrapper.Net
             }
 
             return sb.ToString();
+        }
+
+        public async Task<IReadOnlyCollection<T>> GetAsync()
+        {
+            return await _service.GetAsync(this);
         }
 
         private void AddKeyValuePair(StringBuilder sb, string key, object value)

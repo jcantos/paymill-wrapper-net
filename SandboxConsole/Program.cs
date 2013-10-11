@@ -2,7 +2,7 @@
 using System.Threading.Tasks;
 using PaymillWrapper;
 using PaymillWrapper.Models;
-using PaymillWrapper.Net;
+using PaymillWrapper.Query;
 
 namespace SandboxConsole
 {
@@ -17,7 +17,7 @@ namespace SandboxConsole
 
         static async Task AsyncMain()
         {
-            await GetClientsWithParameters();
+            await GetTransactions();
         }
 
         private static Paymill CreatePaymillInstance()
@@ -31,7 +31,7 @@ namespace SandboxConsole
             // list payments
             Console.WriteLine("Waiting request list payments...");
 
-            var lstPayments = await CreatePaymillInstance().Payments.GetPaymentsAsync();
+            var lstPayments = await CreatePaymillInstance().Payments.GetAsync();
 
             foreach (var payment in lstPayments)
             {
@@ -45,11 +45,11 @@ namespace SandboxConsole
             // list payments
             Console.WriteLine("Waiting request list payments with parameters...");
 
-            var filter = new Filter();
-            filter.Add("count", 5);
-            filter.Add("offset", 41);
-
-            var lstPayments = await CreatePaymillInstance().Payments.GetPaymentsAsync(filter);
+            var lstPayments = await CreatePaymillInstance().Payments
+                .Query
+                .Take(5)
+                .Skip(41)
+                .GetAsync();
 
             foreach (var payment in lstPayments)
             {
@@ -62,7 +62,7 @@ namespace SandboxConsole
         {
             var payment = new Payment {Token = "098f6bcd4621d373cade4e832627b4f6"};
 
-            var newPayment = await CreatePaymillInstance().Payments.AddPaymentAsync(payment);
+            var newPayment = await CreatePaymillInstance().Payments.AddAsync(payment);
 
             Console.WriteLine("PaymentID:{0}", newPayment.Id);
             Console.Read();
@@ -75,7 +75,7 @@ namespace SandboxConsole
                 Client = "client_ad591663d69051d306a8"
             };
 
-            var newPayment = await CreatePaymillInstance().Payments.AddPaymentAsync(payment);
+            var newPayment = await CreatePaymillInstance().Payments.AddAsync(payment);
 
             Console.WriteLine("PaymentID:{0}", newPayment.Id);
             Console.WriteLine("Created at:{0}", newPayment.CreatedAt);
@@ -91,7 +91,7 @@ namespace SandboxConsole
                 Holder = "Max Mustermann"
             };
 
-            var newPayment = await CreatePaymillInstance().Payments.AddPaymentAsync(payment);
+            var newPayment = await CreatePaymillInstance().Payments.AddAsync(payment);
 
             Console.WriteLine("PaymentID:{0}", newPayment.Id);
             Console.WriteLine("Created at:{0}", newPayment.CreatedAt);
@@ -108,7 +108,7 @@ namespace SandboxConsole
                 Client = "client_bbe895116de80b6141fd"
             };
 
-            var newPayment = await CreatePaymillInstance().Payments.AddPaymentAsync(payment);
+            var newPayment = await CreatePaymillInstance().Payments.AddAsync(payment);
 
             Console.WriteLine("PaymentID:{0}", newPayment.Id);
             Console.WriteLine("Created at:{0}", newPayment.CreatedAt);
@@ -117,7 +117,7 @@ namespace SandboxConsole
         static async Task GetPayment()
         {
             const string paymentId = "pay_4c159fe95d3be503778a";
-            var payment = await CreatePaymillInstance().Payments.GetPaymentAsync(paymentId);
+            var payment = await CreatePaymillInstance().Payments.GetAsync(paymentId);
 
             Console.WriteLine("PaymentID:{0}", payment.Id);
             Console.WriteLine("PaymentID:{0}", payment.CreatedAt.ToShortDateString());
@@ -126,7 +126,7 @@ namespace SandboxConsole
         static async Task RemovePayment()
         {
             const string paymentId = "pay_640be2127169cea1d375";
-            var reply = await CreatePaymillInstance().Payments.RemovePaymentAsync(paymentId);
+            var reply = await CreatePaymillInstance().Payments.RemoveAsync(paymentId);
 
             Console.WriteLine("Result remove:{0}", reply);
             Console.Read();
@@ -136,7 +136,7 @@ namespace SandboxConsole
         static async Task GetTransactions()
         {
             Console.WriteLine("Waiting request list transactions...");
-            var lstTransactions = await CreatePaymillInstance().Transactions.GetTransactionsAsync();
+            var lstTransactions = await CreatePaymillInstance().Transactions.GetAsync();
 
             foreach (var transaction in lstTransactions)
             {
@@ -149,11 +149,8 @@ namespace SandboxConsole
         {
             Console.WriteLine("Waiting request list transactions with parameters...");
 
-            var filter = new Filter();
-            filter.Add("count", 1);
-            filter.Add("offset", 2);
-
-            var lstTransactions = await CreatePaymillInstance().Transactions.GetTransactionsAsync(filter);
+            var lstTransactions = await CreatePaymillInstance().Transactions
+                .Query.Take(1).Skip(2).GetAsync();
 
             foreach (var transaction in lstTransactions)
             {
@@ -172,7 +169,7 @@ namespace SandboxConsole
                 Description = "Prueba desde API c#"
             };
 
-            var newTransaction = await CreatePaymillInstance().Transactions.AddTransactionAsync(transaction);
+            var newTransaction = await CreatePaymillInstance().Transactions.AddAsync(transaction);
 
             Console.WriteLine("TransactionID:{0}", newTransaction.Id);
             Console.Read();
@@ -187,7 +184,7 @@ namespace SandboxConsole
                 Payment = new Payment {Id = "pay_81ec02206e9b9c587513"}
             };
 
-            var newTransaction = await CreatePaymillInstance().Transactions.AddTransactionAsync(transaction);
+            var newTransaction = await CreatePaymillInstance().Transactions.AddAsync(transaction);
 
             Console.WriteLine("TransactionID:{0}", newTransaction.Id);
             Console.Read();
@@ -206,7 +203,7 @@ namespace SandboxConsole
                 Client = new Client {Id = "client_ad591663d69051d306a8"}
             };
 
-            var newTransaction = await CreatePaymillInstance().Transactions.AddTransactionAsync(transaction);
+            var newTransaction = await CreatePaymillInstance().Transactions.AddAsync(transaction);
 
             Console.WriteLine("TransactionID:{0}", newTransaction.Id);
             Console.Read();
@@ -215,7 +212,7 @@ namespace SandboxConsole
         {
             Console.WriteLine("Solicitando transaction...");
             const string transactionId = "tran_9255ee9ad5a7f2999625";
-            var transaction = await CreatePaymillInstance().Transactions.GetTransactionAsync(transactionId);
+            var transaction = await CreatePaymillInstance().Transactions.GetAsync(transactionId);
 
             Console.WriteLine("TransactionID:{0}", transaction.Id);
             Console.WriteLine("Created at:{0}", transaction.CreatedAt.ToShortDateString());
@@ -226,7 +223,7 @@ namespace SandboxConsole
         static async Task GetPreauthorizations()
         {
             Console.WriteLine("Waiting request list preauthorizations...");
-            var lstPreauthorizations = await CreatePaymillInstance().Preauthorizations.GetPreauthorizationsAsync();
+            var lstPreauthorizations = await CreatePaymillInstance().Preauthorizations.GetAsync();
 
             foreach (var preauthorization in lstPreauthorizations)
             {
@@ -239,11 +236,11 @@ namespace SandboxConsole
         {
             Console.WriteLine("Waiting request list preauthorizations...");
 
-            var filter = new Filter();
-            filter.Add("count", 1);
-            filter.Add("offset", 2);
-
-            var lstPreauthorizations = await CreatePaymillInstance().Preauthorizations.GetPreauthorizationsAsync(filter);
+            var lstPreauthorizations = await CreatePaymillInstance().Preauthorizations
+                .Query
+                .Take(1)
+                .Skip(2)
+                .GetAsync();
 
             foreach (var preauthorization in lstPreauthorizations)
             {
@@ -261,7 +258,7 @@ namespace SandboxConsole
                 Payment = new Payment {Id = "pay_4c159fe95d3be503778a"}
             };
 
-            var newPreauthorization = await CreatePaymillInstance().Preauthorizations.AddPreauthorizationAsync(preauthorization);
+            var newPreauthorization = await CreatePaymillInstance().Preauthorizations.AddAsync(preauthorization);
 
             Console.WriteLine("PreauthorizationID:{0}", newPreauthorization.Id);
             Console.Read();
@@ -270,7 +267,7 @@ namespace SandboxConsole
         {
             Console.WriteLine("Solicitando preauthorization...");
             const string preauthorizationId = "preauth_96fe414f466f91ddb266";
-            var preauthorization = await CreatePaymillInstance().Preauthorizations.GetPreauthorizationAsync(preauthorizationId);
+            var preauthorization = await CreatePaymillInstance().Preauthorizations.GetAsync(preauthorizationId);
 
             Console.WriteLine("PreauthorizationID:{0}", preauthorization.Id);
             Console.WriteLine("Created at:{0}", preauthorization.CreatedAt.ToShortDateString());
@@ -281,7 +278,7 @@ namespace SandboxConsole
         static async Task GetRefunds()
         {
             Console.WriteLine("Waiting request list refunds...");
-            var lstRefunds = await CreatePaymillInstance().Refunds.GetRefundsAsync();
+            var lstRefunds = await CreatePaymillInstance().Refunds.GetAsync();
 
             foreach (var refund in lstRefunds)
             {
@@ -301,10 +298,9 @@ namespace SandboxConsole
 
             Console.WriteLine("Waiting request list refunds with parameters...");
 
-            var filter = new Filter();
-            filter.Add("count", 5);
-
-            var lstRefunds = await CreatePaymillInstance().Refunds.GetRefundsAsync(filter);
+            var lstRefunds = await CreatePaymillInstance().Refunds.Query
+                .Take(5)
+                .GetAsync();
 
             foreach (var refund in lstRefunds)
             {
@@ -324,7 +320,7 @@ namespace SandboxConsole
                 Transaction = new Transaction {Id = "tran_a7c93a1e5b431b52c0f0"}
             };
 
-            var newRefund = await CreatePaymillInstance().Refunds.AddRefundAsync(refund);
+            var newRefund = await CreatePaymillInstance().Refunds.AddAsync(refund);
 
             Console.WriteLine("RefundID:{0}", newRefund.Id);
             Console.Read();
@@ -333,7 +329,7 @@ namespace SandboxConsole
         {
             Console.WriteLine("Request refund...");
             const string refundId = "refund_53860aa0e514d4913aad";
-            var refund = await CreatePaymillInstance().Refunds.GetRefundAsync(refundId);
+            var refund = await CreatePaymillInstance().Refunds.GetAsync(refundId);
 
             Console.WriteLine("RefundID:{0}", refund.Id);
             Console.WriteLine("Created at:{0}", refund.CreatedAt.ToShortDateString());
@@ -344,7 +340,7 @@ namespace SandboxConsole
         static async Task GetClients()
         {
             Console.WriteLine("Waiting request list clients...");
-            var lstClients = await CreatePaymillInstance().Clients.GetClientsAsync();
+            var lstClients = await CreatePaymillInstance().Clients.GetAsync();
 
             foreach (var c in lstClients)
             {
@@ -357,12 +353,10 @@ namespace SandboxConsole
         {
             Console.WriteLine("Waiting request list clients with parameters...");
 
-            var filter = new Filter();
-            //filter.Add("email", "javicantos22@hotmail.es"); //OK
-            //filter.Add("creditcard", "pay_f95c7d70c6ad8da339e5"); //KO
-            filter.Add("created_at", 1352930695); //KO
-
-            var lstClients = await CreatePaymillInstance().Clients.GetClientsAsync(filter);
+            var lstClients = await CreatePaymillInstance().Clients
+                .Query
+                .CreatedAt(new DateTime(2012, 11, 14, 22, 4, 55))
+                .GetAsync();
 
             foreach (var c in lstClients)
             {
@@ -375,7 +369,7 @@ namespace SandboxConsole
         {
             var c = new Client {Description = "Prueba API", Email = "javicantos22@hotmail.es"};
 
-            var newClient = await CreatePaymillInstance().Clients.AddClientAsync(c);
+            var newClient = await CreatePaymillInstance().Clients.AddAsync(c);
 
             Console.WriteLine("ClientID:{0}", newClient.Id);
             Console.Read();
@@ -384,7 +378,7 @@ namespace SandboxConsole
         {
             Console.WriteLine("Request client...");
             const string clientId = "client_ad591663d69051d306a8";
-            var c = await CreatePaymillInstance().Clients.GetClientAsync(clientId);
+            var c = await CreatePaymillInstance().Clients.GetAsync(clientId);
 
             Console.WriteLine("ClientID:{0}", c.Id);
             Console.WriteLine("Created at:{0}", c.CreatedAt.ToShortDateString());
@@ -399,7 +393,7 @@ namespace SandboxConsole
                 Id = "client_bbe895116de80b6141fd"
             };
 
-            var updatedClient = await CreatePaymillInstance().Clients.UpdateClientAsync(c);
+            var updatedClient = await CreatePaymillInstance().Clients.UpdateAsync(c);
 
             Console.WriteLine("ClientID:{0}", updatedClient.Id);
             Console.Read();
@@ -412,7 +406,7 @@ namespace SandboxConsole
             Console.WriteLine("Removing client...");
 
             const string clientId = "client_180ad3d1042a1da4a0a0";
-            var reply = await CreatePaymillInstance().Clients.RemoveClientAsync(clientId);
+            var reply = await CreatePaymillInstance().Clients.RemoveAsync(clientId);
 
             Console.WriteLine("Result remove:{0}", reply);
             Console.Read();
@@ -422,7 +416,7 @@ namespace SandboxConsole
         static async Task GetOffers()
         {
             Console.WriteLine("Waiting request list offers...");
-            var lstOffers = await CreatePaymillInstance().Offers.GetOffersAsync();
+            var lstOffers = await CreatePaymillInstance().Offers.GetAsync();
 
             foreach (var o in lstOffers)
             {
@@ -435,15 +429,13 @@ namespace SandboxConsole
         {
             Console.WriteLine("Waiting request list offers with parameters...");
 
-            var filter = new Filter();
-            filter.Add("count", 1); //OK
-            filter.Add("offset", 2); //OK
-            //filter.Add("interval","month"); //OK
-            //filter.Add("amount", 495); //OK
-            //filter.Add("created_at", span.TotalSeconds.ToString()); //KO
-            //filter.Add("trial_period_days", 5); //OK
-
-            var lstOffers = await CreatePaymillInstance().Offers.GetOffersAsync(filter);
+            var lstOffers = await CreatePaymillInstance().Offers
+                .Query
+                .Take(1)
+                .Skip(2)
+                //.TrialPeriodDays(5)
+                //.ExactAmount(495) // = 4.95
+                .GetAsync();
 
             foreach (var o in lstOffers)
             {
@@ -463,7 +455,7 @@ namespace SandboxConsole
                 TrialPeriodDays = 3
             };
 
-            var newOffer = await CreatePaymillInstance().Offers.AddOfferAsync(offer);
+            var newOffer = await CreatePaymillInstance().Offers.AddAsync(offer);
 
             Console.WriteLine("OfferID:{0}", newOffer.Id);
             Console.Read();
@@ -472,7 +464,7 @@ namespace SandboxConsole
         {
             Console.WriteLine("Request offer...");
             const string offerId = "offer_6eea405f83d4d3098604";
-            var offer = await CreatePaymillInstance().Offers.GetOfferAsync(offerId);
+            var offer = await CreatePaymillInstance().Offers.GetAsync(offerId);
 
             Console.WriteLine("OfferID:{0}", offer.Id);
             Console.WriteLine("Created at:{0}", offer.CreatedAt.ToShortDateString());
@@ -486,7 +478,7 @@ namespace SandboxConsole
                 Id = "offer_6eea405f83d4d3098604"
             };
 
-            var updatedOffer = await CreatePaymillInstance().Offers.UpdateOfferAsync(offer);
+            var updatedOffer = await CreatePaymillInstance().Offers.UpdateAsync(offer);
 
             Console.WriteLine("OfferID:{0}", updatedOffer.Id);
             Console.Read();
@@ -496,7 +488,7 @@ namespace SandboxConsole
             Console.WriteLine("Removing offer...");
 
             const string offerId = "offer_6eea405f83d4d3098604";
-            var reply = await CreatePaymillInstance().Offers.RemoveOfferAsync(offerId);
+            var reply = await CreatePaymillInstance().Offers.RemoveAsync(offerId);
 
             Console.WriteLine("Result remove:{0}", reply);
             Console.Read();
@@ -506,7 +498,7 @@ namespace SandboxConsole
         static async Task GetSubscriptions()
         {
             Console.WriteLine("Waiting request list subscriptions...");
-            var lstSubscriptions = await CreatePaymillInstance().Subscriptions.GetSubscriptionsAsync();
+            var lstSubscriptions = await CreatePaymillInstance().Subscriptions.GetAsync();
 
             foreach (var s in lstSubscriptions)
             {
@@ -519,14 +511,12 @@ namespace SandboxConsole
         {
             Console.WriteLine("Waiting request list subscriptions with parameters...");
 
-            var filter = new Filter();
-            filter.Add("count", 1); //OK
-            filter.Add("offset", 2); //OK
-            //filter.Add("offer", "offer_32008ddd39954e71ed48"); //KO
-            //filter.Add("canceled_at", 495); //KO
-            //filter.Add("created_at", 1353194860); //KO
-
-            var lstSubscriptions = await CreatePaymillInstance().Subscriptions.GetSubscriptionsAsync(filter);
+            var lstSubscriptions = await CreatePaymillInstance().Subscriptions
+                .Query
+                .Take(1)
+                .Skip(2)
+                // .Offer("offer_32008ddd39954e71ed48")
+                .GetAsync();
 
             foreach (var s in lstSubscriptions)
             {
@@ -544,7 +534,7 @@ namespace SandboxConsole
                 Payment = new Payment {Id = "pay_81ec02206e9b9c587513"}
             };
 
-            var newSubscription = await CreatePaymillInstance().Subscriptions.AddSubscriptionAsync(subscription);
+            var newSubscription = await CreatePaymillInstance().Subscriptions.AddAsync(subscription);
 
             Console.WriteLine("SubscriptionID:{0}", newSubscription.Id);
             Console.Read();
@@ -553,7 +543,7 @@ namespace SandboxConsole
         {
             Console.WriteLine("Request subscription...");
             const string subscriptionId = "sub_e77d3332e456674101ad";
-            var subscription = await CreatePaymillInstance().Subscriptions.GetSubscriptionAsync(subscriptionId);
+            var subscription = await CreatePaymillInstance().Subscriptions.GetAsync(subscriptionId);
 
             Console.WriteLine("SubscriptionID:{0}", subscription.Id);
             Console.WriteLine("Created at:{0}", subscription.CreatedAt.ToShortDateString());
@@ -567,7 +557,7 @@ namespace SandboxConsole
                 Id = "sub_569df922b4506cd73030"
             };
 
-            var updatedSubscription = await CreatePaymillInstance().Subscriptions.UpdateSubscriptionAsync(subscription);
+            var updatedSubscription = await CreatePaymillInstance().Subscriptions.UpdateAsync(subscription);
 
             Console.WriteLine("SubscriptionID:{0}", updatedSubscription.Id);
             Console.Read();
@@ -579,7 +569,7 @@ namespace SandboxConsole
             Console.WriteLine("Removing subscription...");
 
             const string subscriptionId = "sub_569df922b4506cd73030";
-            var reply = await CreatePaymillInstance().Subscriptions.RemoveSubscriptionAsync(subscriptionId);
+            var reply = await CreatePaymillInstance().Subscriptions.RemoveAsync(subscriptionId);
 
             Console.WriteLine("Result remove:{0}", reply);
             Console.Read();

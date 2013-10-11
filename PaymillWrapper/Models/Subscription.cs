@@ -11,7 +11,7 @@ namespace PaymillWrapper.Models
     /// A subscription connects a client to the offers-object.
     /// </summary>
     [JsonConverter(typeof(JsonParser<Subscription>))]
-    public class Subscription : BaseModel
+    public class Subscription : BaseModel, IQueryableOffer
     {
         /// <summary>
         /// Hash describing the offer which is subscribed to the client

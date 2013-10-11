@@ -6,15 +6,8 @@ namespace PaymillWrapper.Models
     /// Refunds are own objects with own calls for existing transactions. 
     /// The refunded amount will be credited to the account of the client.
     /// </summary>
-    public class Refund : BaseModel
+    public class Refund : BaseModel, IQueryableClient, IQueryableTransaction, IQueryableAmount
     {
-        public enum TypeStatus
-        {
-            Open, 
-            Refunded, 
-            Failed
-        }
-
         /// <summary>
         /// Transactions-object
         /// </summary>
@@ -43,7 +36,7 @@ namespace PaymillWrapper.Models
         /// Indicates the current status of this transaction
         /// </summary>
         [DataMember(Name = "Status")]
-        public TypeStatus Status { get; set; }
+        public RefundStatus Status { get; set; }
 
         /// <summary>
         /// The description given for this refund
@@ -62,5 +55,12 @@ namespace PaymillWrapper.Models
         /// </summary>
         [DataMember(Name = "response_code")]
         public ResponseCode ResponseCode { get; set; }
+    }
+
+    public enum RefundStatus
+    {
+        Open, 
+        Refunded, 
+        Pending
     }
 }

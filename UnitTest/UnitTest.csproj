@@ -57,9 +57,10 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
-    <Compile Include="Net\TestFilter.cs" />
+    <Compile Include="Net\TestQuery.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Net\TestURLEncoder.cs" />
+    <Compile Include="TestEnumExtensions.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\PaymillWrapper\PaymillWrapper.csproj">

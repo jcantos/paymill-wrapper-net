@@ -1,15 +1,18 @@
 ﻿using System.Net.Http;
 using System;
 using System.Net.Http.Headers;
+using System.Runtime.CompilerServices;
 using System.Text;
 using PaymillWrapper.Models;
 using PaymillWrapper.Service;
+
+[assembly: InternalsVisibleTo("UnitTest")]
 
 namespace PaymillWrapper
 {
     public class Paymill
     {
-        public Paymill(string apiKey, string apiUrl = "https://api.paymill.com/v2/")
+        public Paymill(string apiKey, string apiUrl = "https://api.paymill.com/v2")
         {
             ApiKey = apiKey;
             ApiUrl = apiUrl;

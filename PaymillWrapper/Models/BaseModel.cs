@@ -6,8 +6,6 @@ namespace PaymillWrapper.Models
     [DataContract]
     public class BaseModel
     {
-        private static readonly DateTime UnixEpoch = new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc).ToLocalTime();
-
         /// <summary>
         /// Unique identifier
         /// </summary>
@@ -23,8 +21,8 @@ namespace PaymillWrapper.Models
         [DataMember(Name = "Created_At")]
         private int CreatedAtTicks
         {
-            get { return (int)(CreatedAt - UnixEpoch).TotalSeconds; }
-            set { CreatedAt = UnixEpoch.AddSeconds(value); }
+            get { return CreatedAt.ToUnixTimestamp(); }
+            set { CreatedAt = value.ParseAsUnixTimestamp(); }
         }
 
         /// <summary>
@@ -36,8 +34,8 @@ namespace PaymillWrapper.Models
         [DataMember(Name = "Updated_At")]
         private int UpdatedAtTicks
         {
-            get { return (int)(UpdatedAt - UnixEpoch).TotalSeconds; }
-            set { UpdatedAt = UnixEpoch.AddSeconds(value); }
+            get { return UpdatedAt.ToUnixTimestamp(); }
+            set { UpdatedAt = value.ParseAsUnixTimestamp(); }
         }
     }
 }

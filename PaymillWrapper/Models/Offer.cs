@@ -6,7 +6,7 @@ namespace PaymillWrapper.Models
     /// An offer is a recurring plan which a user can subscribe to. 
     /// You can create different offers with different plan attributes e.g. a monthly or a yearly based paid offer/plan.
     /// </summary>
-    public class Offer : BaseModel
+    public class Offer : BaseModel, IQueryableAmount
     {
         public enum TypeInterval
         {

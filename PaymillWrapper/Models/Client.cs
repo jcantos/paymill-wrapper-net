@@ -10,7 +10,7 @@ namespace PaymillWrapper.Models
     /// insert credit card details for a client, edit client details and of course make transactions.
     /// </summary>
     [JsonConverter(typeof(JsonParser<Client>))]
-    public class Client : BaseModel
+    public class Client : BaseModel, IQueryableDescription, IQueryableSubscription, IQueryableOffer, IQueryablePayment
     {
         /// <summary>
         /// Mail address of this client
