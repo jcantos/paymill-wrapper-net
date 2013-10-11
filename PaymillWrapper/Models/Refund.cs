@@ -11,13 +11,13 @@ namespace PaymillWrapper.Models
         /// <summary>
         /// Transactions-object
         /// </summary>
-        [DataMember(Name = "Transaction")]
+        [DataMember(Name = "transaction")]
         public Transaction Transaction { get; set; }
 
         /// <summary>
         /// The refunded amount
         /// </summary>
-        [DataMember(Name = "Amount")]
+        [DataMember(Name = "amount")]
         public int Amount { get; set; }
 
         /// <summary>
@@ -35,19 +35,19 @@ namespace PaymillWrapper.Models
         /// <summary>
         /// Indicates the current status of this transaction
         /// </summary>
-        [DataMember(Name = "Status")]
+        [DataMember(Name = "status")]
         public RefundStatus Status { get; set; }
 
         /// <summary>
         /// The description given for this refund
         /// </summary>
-        [DataMember(Name = "Description")]
+        [DataMember(Name = "description")]
         public string Description { get; set; }
 
         /// <summary>
         /// Whether this refund happend in test- or in livemode
         /// </summary>
-        [DataMember(Name = "Livemode")]
+        [DataMember(Name = "livemode")]
         public bool Livemode { get; set; }
 
         /// <summary>

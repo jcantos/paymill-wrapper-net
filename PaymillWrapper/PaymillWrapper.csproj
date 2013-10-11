@@ -77,6 +77,7 @@
     <Compile Include="PaymillException.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="QueryableInterfaces.cs" />
+    <Compile Include="ReflectionHelper.cs" />
     <Compile Include="Service\Resource.cs" />
     <Compile Include="Service\AbstractService.cs" />
     <Compile Include="Service\ClientService.cs" />

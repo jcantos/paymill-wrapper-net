@@ -16,44 +16,37 @@ namespace PaymillWrapper.Models
         /// <summary>
         /// Hash describing the offer which is subscribed to the client
         /// </summary>
-        [DataMember(Name = "Offer")]
+        [DataMember(Name = "offer")]
         public Offer Offer { get; set; }
 
         /// <summary>
         /// Whether this subscription was issued while being in live mode or not
         /// </summary>
-        [DataMember(Name = "Livemode")]
+        [DataMember(Name = "livemode")]
         public bool Livemode { get; set; }
 
         /// <summary>
         /// Cancel this subscription immediately or at the end of the current period?
         /// </summary>
-        [DataMember(Name = "Cancel_At_Period_End")]
+        [DataMember(Name = "cancel_at_period_end")]
         public bool CancelAtPeriodEnd { get; set; }
 
         /// <summary>
         /// Cancel date
         /// </summary>
-        [DataMember(Name = "CanceledAt")]
+        [DataMember(Name = "canceled_at")]
         public DateTime CanceledAt { get; set; }
 
         /// <summary>
         /// Client-object
         /// </summary>
-        [DataMember(Name = "Client")]
+        [DataMember(Name = "client")]
         public Client Client { get; set; }
-
-        /// <summary>
-        /// To connects the offer with more than a client.
-        /// Under construction
-        /// </summary>
-        [DataMember(Name = "Clients")]
-        public List<Client> Clients { get; set; }
 
         /// <summary>
         /// Payment-object
         /// </summary>
-        [DataMember(Name = "Payment")]
+        [DataMember(Name = "payment")]
         public Payment Payment { get; set; }
     }
 }

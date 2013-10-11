@@ -1,9 +1,18 @@
 ﻿using System;
 using System.Globalization;
+using System.Linq.Expressions;
+using System.Reflection;
+using System.Runtime.Serialization;
 using PaymillWrapper.Models;
 
 namespace PaymillWrapper.Query
 {
+    public enum OrderDirection
+    {
+        Descending,
+        Ascending
+    }
+
     public static class QueryExtensions
     {
         #region Created at
@@ -114,6 +123,21 @@ namespace PaymillWrapper.Query
             where T : BaseModel, IQueryableSubscription
         {
             query.Add("subscription", id);
+            return query;
+        }
+
+        public static Query<T> OrderBy<T>(this Query<T> query, 
+            Expression<Func<T, object>> orderByMember, 
+            OrderDirection direction = OrderDirection.Ascending)
+            where T : BaseModel
+        {
+            var memberInfo = ReflectionHelper.FindProperty(orderByMember);
+            var dataMember = memberInfo.GetCustomAttribute<DataMemberAttribute>();
+            if (dataMember == null)
+            {
+                throw new ArgumentException("Member property needs to be among the serializable members of a class.", "orderByMember");
+            }
+            query.Add("order", dataMember.Name + (direction == OrderDirection.Ascending ? "_asc" : "_desc"));
             return query;
         }
     }

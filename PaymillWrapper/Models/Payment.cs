@@ -19,73 +19,73 @@ namespace PaymillWrapper.Models
         /// <summary>
         /// enum(creditcard,debit)
         /// </summary>
-        [DataMember(Name = "Type")]
+        [DataMember(Name = "type")]
         public TypePayment Type { get; set; }
 
         /// <summary>
         /// The identifier of a client (client-object)
         /// </summary>
-        [DataMember(Name = "Client")]
+        [DataMember(Name = "client")]
         public string Client { get; set; }
 
         /// <summary>
         /// Visa or Mastercard
         /// </summary>
-        [DataMember(Name = "Card_Type")]
+        [DataMember(Name = "card_type")]
         public string CardType { get; set; }
 
         /// <summary>
         /// Country
         /// </summary>
-        [DataMember(Name = "Country")]
+        [DataMember(Name = "country")]
         public string Country { get; set; }
 
         /// <summary>
         /// Expiry month of the credit card
         /// </summary>
-        [DataMember(Name = "Expire_Month")]
+        [DataMember(Name = "expire_month")]
         public int ExpireMonth { get; set; }
 
         /// <summary>
         /// Expiry year of the credit card
         /// </summary>
-        [DataMember(Name = "Expire_Year")]
+        [DataMember(Name = "expire_year")]
         public int ExpireYear { get; set; }
 
         /// <summary>
         /// Name of the card holder
         /// </summary>
-        [DataMember(Name = "Card_Holder")]
+        [DataMember(Name = "card_holder")]
         public string CardHolder { get; set; }
 
         /// <summary>
         /// The last four digits of the credit card
         /// </summary>
-        [DataMember(Name = "Last4")]
+        [DataMember(Name = "last4")]
         public string Last4 { get; set; }
 
         /// <summary>
         /// The used Bank Code
         /// </summary>
-        [DataMember(Name = "Code")]
+        [DataMember(Name = "code")]
         public string Code { get; set; }
 
         /// <summary>
         /// Name of the account holder
         /// </summary>
-        [DataMember(Name = "Holder")]
+        [DataMember(Name = "holder")]
         public string Holder { get; set; }
 
         /// <summary>
         /// The used account number, for security reasons the number is masked
         /// </summary>
-        [DataMember(Name = "Account")]
+        [DataMember(Name = "account")]
         public string Account { get; set; }
 
         /// <summary>
         /// Unique credit card token
         /// </summary>
-        [DataMember(Name = "Token")]
+        [DataMember(Name = "token")]
         public string Token { get; set; }
     }
 }

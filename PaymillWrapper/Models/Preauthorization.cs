@@ -10,7 +10,7 @@ namespace PaymillWrapper.Models
         /// <summary>
         /// Amount of this transaction
         /// </summary>
-        [DataMember(Name = "Amount")]
+        [DataMember(Name = "amount")]
         public double Amount { get; set; }
 
         /// <summary>
@@ -28,31 +28,31 @@ namespace PaymillWrapper.Models
         /// <summary>
         /// Whether this transaction was issued while being in live mode or not
         /// </summary>
-        [DataMember(Name = "Livemode")]
+        [DataMember(Name = "livemode")]
         public bool Livemode { get; set; }
 
         /// <summary>
         /// Creditcard-object or directdebit-object
         /// </summary>
-        [DataMember(Name = "Payment")]
+        [DataMember(Name = "payment")]
         public Payment Payment { get; set; }
 
         /// <summary>
         /// Client-object
         /// </summary>
-        [DataMember(Name = "Client")]
+        [DataMember(Name = "client")]
         public Client Client { get; set; }
 
         /// <summary>
         /// ISO 4217 formatted currency code
         /// </summary>
-        [DataMember(Name = "Currency")]
+        [DataMember(Name = "currency")]
         public string Currency { get; set; }
 
         /// <summary>
         /// A token generated through JavaScript-Bridge Paymill
         /// </summary>
-        [DataMember(Name = "Token")]
+        [DataMember(Name = "token")]
         public string Token { get; set; }
 
     }

@@ -9,7 +9,7 @@ namespace PaymillWrapper.Models
         /// <summary>
         /// Unique identifier
         /// </summary>
-        [DataMember(Name = "Id")]
+        [DataMember(Name = "id")]
         public string Id { get; set; }
 
         /// <summary>
@@ -18,7 +18,7 @@ namespace PaymillWrapper.Models
         [IgnoreDataMember]
         public DateTime CreatedAt { get; set; }
 
-        [DataMember(Name = "Created_At")]
+        [DataMember(Name = "created_at")]
         private int CreatedAtTicks
         {
             get { return CreatedAt.ToUnixTimestamp(); }
@@ -31,7 +31,7 @@ namespace PaymillWrapper.Models
         [IgnoreDataMember]
         public DateTime UpdatedAt { get; set; }
 
-        [DataMember(Name = "Updated_At")]
+        [DataMember(Name = "updated_at")]
         private int UpdatedAtTicks
         {
             get { return UpdatedAt.ToUnixTimestamp(); }
