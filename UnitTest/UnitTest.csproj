@@ -20,6 +20,8 @@
     <SccLocalPath>SAK</SccLocalPath>
     <SccAuxPath>SAK</SccAuxPath>
     <SccProvider>SAK</SccProvider>
+    <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
+    <RestorePackages>true</RestorePackages>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -67,12 +69,6 @@
     <Compile Include="TestEnumExtensions.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\PaymillWrapper\PaymillWrapper.csproj">
-      <Project>{56d3c8fb-ed6e-4d9a-9472-704ff19a1ba5}</Project>
-      <Name>PaymillWrapper</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <EmbeddedResource Include="Models\Input\client.json" />
     <EmbeddedResource Include="Models\Input\offer.json" />
     <EmbeddedResource Include="Models\Input\payment.json" />
@@ -81,6 +77,12 @@
     <EmbeddedResource Include="Models\Input\transaction.json" />
     <EmbeddedResource Include="Models\Input\preauthorizations.json" />
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\PaymillSharp\PaymillSharp.csproj">
+      <Project>{56d3c8fb-ed6e-4d9a-9472-704ff19a1ba5}</Project>
+      <Name>PaymillSharp</Name>
+    </ProjectReference>
   </ItemGroup>
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">
@@ -102,6 +104,7 @@
   </Choose>
   <Import Project="$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets" Condition="Exists('$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets')" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

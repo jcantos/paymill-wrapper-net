@@ -5,8 +5,8 @@ using System.Linq;
 using System.Reflection;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Newtonsoft.Json;
-using PaymillWrapper.Models;
-using PaymillWrapper.Internal;
+using PaymillSharp.Models;
+using PaymillSharp.Internal;
 
 namespace UnitTest.Models
 {

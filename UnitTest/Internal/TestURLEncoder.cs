@@ -1,6 +1,6 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using PaymillWrapper.Internal;
-using PaymillWrapper.Models;
+using PaymillSharp.Internal;
+using PaymillSharp.Models;
 
 namespace UnitTest.Internal
 {

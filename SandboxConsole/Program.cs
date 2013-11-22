@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Threading.Tasks;
-using PaymillWrapper;
-using PaymillWrapper.Models;
-using PaymillWrapper.Query;
+using PaymillSharp;
+using PaymillSharp.Models;
+using PaymillSharp.Query;
 
 namespace SandboxConsole
 {

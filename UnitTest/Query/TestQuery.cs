@@ -1,6 +1,6 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using PaymillWrapper.Models;
-using PaymillWrapper.Query;
+using PaymillSharp.Models;
+using PaymillSharp.Query;
 
 namespace UnitTest.Query
 {

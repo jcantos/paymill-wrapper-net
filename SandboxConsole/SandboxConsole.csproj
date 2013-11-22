@@ -70,9 +70,9 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\PaymillWrapper\PaymillWrapper.csproj">
+    <ProjectReference Include="..\PaymillSharp\PaymillSharp.csproj">
       <Project>{56d3c8fb-ed6e-4d9a-9472-704ff19a1ba5}</Project>
-      <Name>PaymillWrapper</Name>
+      <Name>PaymillSharp</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

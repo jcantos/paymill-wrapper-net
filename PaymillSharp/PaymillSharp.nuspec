@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<package >
+  <metadata>
+    <id>PaymillSharp</id>
+    <version>0.3</version>
+    <title>PaymillSharp</title>
+    <authors>Digital Creations AS</authors>
+    <owners>vegardlarsen</owners>
+    <licenseUrl>https://raw.github.com/digitalcreations/paymillsharp/master/LICENSE</licenseUrl>
+    <projectUrl>https://github.com/digitalcreations/paymillsharp</projectUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>Paymill implementation for .NET.</description>
+    <releaseNotes>Total refactor.</releaseNotes>
+    <copyright>Copyright 2013</copyright>
+    <tags>paymill wrapper</tags>
+
+    <dependencies>
+      <dependency id="Newtonsoft.Json" version="5.0.5" />
+    </dependencies>
+  </metadata>
+  <files>
+    <file src="bin\Release\PaymillSharp.dll" target="lib\net45\PaymillSharp.dll" />
+  </files>
+</package>
