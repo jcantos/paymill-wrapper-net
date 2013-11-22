@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Threading.Tasks;
 using PaymillWrapper.Internal;
 using PaymillWrapper.Models;
@@ -40,7 +39,6 @@ namespace PaymillWrapper.Service
                 requestUri += String.Format("?{0}", query);
 
             var response = await Client.GetAsync(requestUri);
-            response.EnsureSuccessStatusCode();
 #if DEBUG
             Trace.WriteLine(requestUri);
             Trace.Write(await response.Content.ReadAsStringAsync());
@@ -76,7 +74,6 @@ namespace PaymillWrapper.Service
                 requestUri += "/" + resourceId;
 
             var response = await Client.PostAsync(requestUri, content);
-            response.EnsureSuccessStatusCode();
 
             var json = await response.Content.ReadAsStringAsync();
             var result = JsonConvert.DeserializeObject<SingleResult<TResult>>(json, new UnixTimestampConverter());
@@ -95,7 +92,6 @@ namespace PaymillWrapper.Service
         {
             var requestUri = _apiUrl + "/" + _resource.ToString().ToLower() + "/" + resourceId;
             var response = await Client.GetAsync(requestUri);
-            response.EnsureSuccessStatusCode();
             var json = await response.Content.ReadAsStringAsync();
             var result = JsonConvert.DeserializeObject<SingleResult<T>>(json, new UnixTimestampConverter());
             return result.Data;
@@ -105,7 +101,6 @@ namespace PaymillWrapper.Service
         {
             var requestUri = _apiUrl + "/" + _resource.ToString().ToLower() + "/" + resourceId;
             var response = await Client.DeleteAsync(requestUri);
-            response.EnsureSuccessStatusCode();
             var jsonArray = await response.Content.ReadAsAsync<JObject>();
             var r = jsonArray["data"].ToString();
             return r.Equals("[]");
@@ -118,7 +113,6 @@ namespace PaymillWrapper.Service
 
             var requestUri = _apiUrl + "/" + _resource.ToString().ToLower() + "/" + GetResourceId(obj);
             var response = await Client.PutAsync(requestUri, content);
-            response.EnsureSuccessStatusCode();
             var json = await response.Content.ReadAsStringAsync();
             var result = JsonConvert.DeserializeObject<SingleResult<T>>(json, new UnixTimestampConverter());
             return result.Data;
