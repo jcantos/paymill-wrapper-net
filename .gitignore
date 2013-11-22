@@ -17,6 +17,7 @@ Thumbs.db
 *.cache
 *.ilk
 *.log
+*.nupkg
 [Bb]in
 [Dd]ebug*/
 *.lib
@@ -27,3 +28,5 @@ _ReSharper*/
 [Tt]est[Rr]esult*
 *.vssscc
 $tf*/
+
+packages/
